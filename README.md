@@ -1,4 +1,3 @@
-[Your Name.html](https://github.com/user-attachments/files/35303099/Your.Name.html)
 # danielbertocci.github.io<!DOCTYPE html>
 <html lang="en">
 <head>
