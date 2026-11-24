@@ -21,8 +21,8 @@ nav .logo{font-weight:700;font-stretch:90%}
 nav div{display:flex;gap:1.6rem}
 nav a{color:var(--dim);transition:color .25s}
 nav a:hover{color:var(--lamp)}
-.hero{position:relative;height:100svh;min-height:560px;overflow:hidden}
-#c{position:absolute;inset:0;width:100%;height:100%}
+.hero{position:relative;height:100svh;min-height:100dvh;overflow:hidden}
+#c{position:absolute;inset:0;display:block;width:100%;height:100%}
 .hero .txt{position:absolute;left:clamp(20px,5vw,64px);top:20vh;pointer-events:none;z-index:2}
 .hero h1{margin:0;font-size:clamp(2.8rem,9vw,7.5rem);line-height:.95;font-weight:800;font-stretch:75%;letter-spacing:-.02em;transition:font-stretch .8s cubic-bezier(.2,.8,.2,1);background:linear-gradient(100deg,#ffe29a,#ff8a3d 55%,#ff5f6d);-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:.08em}
 .hero.rev h1{font-stretch:118%}
@@ -116,7 +116,7 @@ const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const hero=document.getElementById('hero'),cv=document.getElementById('c'),ctx=cv.getContext('2d');
 let W,H,cols,rows,cw=10,ch=16,dpr=1,px=0,t=0;
 function size(){
-  dpr=Math.min(devicePixelRatio||1,2);W=hero.clientWidth;H=hero.clientHeight;
+  dpr=Math.min(devicePixelRatio||1,2);W=Math.max(1,hero.clientWidth);H=Math.max(1,hero.clientHeight);
   cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
   cw=W<600?8:10;ch=Math.round(cw*1.6);cols=Math.ceil(W/cw);rows=Math.ceil(H/ch);
   ctx.font=cw*1.6*.82+'px ui-monospace,Menlo,Consolas,monospace';ctx.textBaseline='top';
@@ -141,7 +141,9 @@ function ridge(L,x){
 function frame(dt){
   t+=dt;
   ctx.clearRect(0,0,W,H);
-  const moonX=W*.82,moonY=H*.15,moonR=Math.min(W,H)*.12;
+  const moonR=Math.min(W,H)*.12;
+  const moonX=Math.min(W-moonR*1.2,Math.max(moonR*1.2,W*.82));
+  const moonY=Math.max(moonR*1.2,H*.15);
   const moonGlow=ctx.createRadialGradient(moonX,moonY,moonR*.18,moonX,moonY,moonR*2.8);
   moonGlow.addColorStop(0,'rgba(235,235,220,.22)');
   moonGlow.addColorStop(.35,'rgba(205,215,235,.10)');
@@ -166,7 +168,8 @@ function frame(dt){
     const c0=Math.floor(cols*f-px*1.2);
     for(let i=0;i<h;i++)for(let j=-i;j<=i;j++)put(gr-1-h+i,c0+j,'^',i%2?'#3f9a6c':'#58c08c');
     put(gr-1,c0,'|','#8a5a3c');});
-  const tc=Math.floor(cols*.42),fc=tc+15,fr=gr-1;
+  const tc=Math.floor(cols*.42);
+  const fc=Math.min(cols-3,tc+Math.max(8,Math.floor(cols*.14))),fr=gr-1;
   ["   /\\   ","  /  \\  "," /_/\\_\\ "].forEach((ln,i)=>[...ln].forEach((x,j)=>{
     if(x!==' ')put(gr-3+i,tc+j,x,(i===2&&(j===3||j===4))?'#ffffff':'#3d78c4');
   }));
