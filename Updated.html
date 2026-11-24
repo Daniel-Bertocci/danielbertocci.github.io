@@ -56,8 +56,8 @@ h2{font-size:1.1rem;font-weight:600;color:var(--dim);margin:0 0 1.2rem}
 .proj .ds{color:var(--dim);margin-left:auto;text-align:right}
 .proj button:hover .nm,.proj button:focus-visible .nm{transform:translateX(10px);font-stretch:105%;color:var(--c,var(--lamp))}
 .proj.open .pl{transform:rotate(45deg)}
-.more{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s cubic-bezier(.2,.8,.2,1)}
-.proj.open .more{grid-template-rows:1fr}
+.more{display:grid;grid-template-rows:0fr;visibility:hidden;transition:grid-template-rows .5s cubic-bezier(.2,.8,.2,1),visibility .5s}
+.proj.open .more,.abt.open .more{grid-template-rows:1fr;visibility:visible}
 .more>div{overflow:hidden}
 .more p{margin:0 0 1.2rem 2.2rem;color:var(--dim);max-width:56ch}
 #about{padding:6vh 0}
@@ -73,6 +73,26 @@ h2{font-size:1.1rem;font-weight:600;color:var(--dim);margin:0 0 1.2rem}
 .ext a:hover{color:var(--lamp);padding-left:12px}
 footer{padding:6vh 0 10vh;color:var(--dim);font-size:.9rem;display:flex;justify-content:space-between}
 footer a:hover{color:var(--lamp)}
+.acts{display:flex;gap:.6rem;flex-wrap:wrap;margin:0 0 1.3rem 2.2rem}
+.act{font:inherit;font-size:.88rem;color:var(--c,var(--lamp));background:none;border:1px solid var(--c,var(--lamp));border-radius:999px;padding:4px 14px;cursor:pointer;transition:background .25s,color .25s}
+.act:hover{background:var(--c,var(--lamp));color:#0b0f1a}
+.modal{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) 16px max(16px,env(safe-area-inset-bottom,0px));background:rgba(4,6,12,.72);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+.modal.on{opacity:1;visibility:visible}
+.win{width:min(900px,100%);height:min(82vh,720px);display:flex;flex-direction:column;background:#fff;color:#1d1d1f;border-radius:12px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.6);transform:translateY(20px) scale(.97);transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.modal.on .win{transform:none}
+.win .ttl{flex:1;min-width:0;text-align:center;font-size:.85rem;font-weight:600;color:#3a3a3c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dots .x{position:relative;width:10px;height:10px;padding:0;border-radius:50%;background:#ff5f57;border:.5px solid rgba(0,0,0,.15);cursor:pointer}
+.dots .x::after{content:"";position:absolute;inset:-9px}
+.mcta{display:inline-block;padding:3px 11px;border:1px solid #fdba74;border-radius:999px;background:#fff4e6;color:#c2410c;font-size:.78rem;font-weight:600;white-space:nowrap;transition:background .25s,color .25s}
+.mcta:hover{background:#e8590c;color:#fff}
+.mcta[hidden]{display:none}
+.pv{flex:1;min-height:0;background:#f5f5f7;overflow:auto}
+.pv iframe{width:100%;height:100%;border:0;display:block}
+.card{max-width:640px;margin:0 auto;padding:clamp(1rem,4vw,2rem)}
+.card .shot{height:clamp(150px,28vh,240px);border-radius:10px;display:flex;align-items:flex-end;padding:1rem 1.2rem;margin-bottom:1.2rem;color:#fff;font-size:clamp(1.5rem,5vw,2.4rem);font-weight:800;font-stretch:75%;line-height:1;background:linear-gradient(135deg,var(--c),#0b1020)}
+.card img{width:100%;border-radius:10px;margin-bottom:1.2rem;display:block}
+.card p{margin:0 0 1.2rem;color:#3a3a3c;font-size:1.05rem}
+.tags span{display:inline-block;margin:0 .4rem .4rem 0;padding:2px 12px;border-radius:999px;font-size:.8rem;font-weight:600;color:#1d1d1f;border:1px solid var(--c);background:color-mix(in srgb,var(--c) 14%,#fff)}
 @media(max-width:600px){.proj .ds{display:none}nav div{gap:1rem}.hero .txt{top:76px}.hero p{min-height:2.9em}.body{padding:.9rem 1.1rem 1.1rem}}
 @media(prefers-reduced-motion:reduce){.caret{animation:none}*{transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
@@ -118,12 +138,19 @@ footer a:hover{color:var(--lamp)}
 
 <section class="ext" id="contact"><div class="wrap">
   <h2>Elsewhere</h2>
-  <a href="resume.pdf"><b>Resume</b><span>one-page PDF</span></a>
+  <a href="resume.pdf" id="resumeLink" target="_blank" rel="noopener noreferrer"><b>Resume</b><span>preview · one-page PDF</span></a>
   <a href="https://github.com/YOUR-GITHUB-USERNAME" target="_blank" rel="noopener"><b>GitHub</b><span>projects &amp; code</span></a>
   <a href="https://www.instagram.com/YOUR-INSTAGRAM-USERNAME" target="_blank" rel="noopener"><b>Instagram</b><span>photos &amp; outdoors</span></a>
   <a href="mailto:YOUR-EMAIL@example.com"><b>Email</b><span>YOUR-EMAIL@example.com</span></a>
   <footer><span>© 2026 Daniel Bertocci · California</span><a href="#top">back to top ↑</a></footer>
 </div></section>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle" aria-hidden="true">
+  <div class="win">
+    <div class="bar"><div class="dots"><button class="x" type="button" aria-label="Close preview"></button><i></i><i></i></div><span class="ttl" id="mTitle"></span><a class="mcta" id="mDl" download hidden>Download</a><a class="mcta" id="mOpen" target="_blank" rel="noopener noreferrer">Open in new tab ↗</a></div>
+    <div class="pv" id="pv"></div>
+  </div>
+</div>
 
 <script>
 (function(){
@@ -207,6 +234,49 @@ function frame(dt){
 let last=performance.now();
 function loop(n){const dt=Math.min(50,n-last);last=n;frame(dt);if(!reduce)requestAnimationFrame(loop)}
 frame(16);if(!reduce)requestAnimationFrame(loop);
+/* EDIT ME: url opens in a new tab; embed (optional) shows a live page or PDF inside the preview; img (optional) shows a screenshot */
+const LINKS={
+  'Garage Log':{url:'https://github.com/YOUR-GITHUB-USERNAME/garage-log'},
+  'Personal Website':{url:'https://github.com/YOUR-GITHUB-USERNAME/portfolio'},
+  'Home Server':{url:'https://github.com/YOUR-GITHUB-USERNAME/home-server'},
+  'Track Day Timer':{url:'https://github.com/YOUR-GITHUB-USERNAME/track-day-timer'},
+  'Trail Planner':{url:'https://github.com/YOUR-GITHUB-USERNAME/trail-planner'},
+  'Weekend Builds':{url:'https://www.instagram.com/YOUR-INSTAGRAM-USERNAME'},
+  'Summit Log':{url:'https://www.instagram.com/YOUR-INSTAGRAM-USERNAME'}
+};
+const modal=document.getElementById('modal'),pv=document.getElementById('pv'),mT=document.getElementById('mTitle'),mO=document.getElementById('mOpen'),mD=document.getElementById('mDl');
+let opener=null;
+function openModal(title,url,node,dl){opener=document.activeElement;mT.textContent=title;mO.href=url;
+  if(dl){mD.hidden=false;mD.href=dl}else mD.hidden=true;
+  pv.replaceChildren(node);modal.classList.add('on');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';modal.querySelector('.x').focus()}
+function closeModal(){modal.classList.remove('on');modal.setAttribute('aria-hidden','true');document.body.style.overflow='';pv.replaceChildren();if(opener&&opener.focus)opener.focus()}
+modal.addEventListener('click',e=>{if(e.target===modal)closeModal()});
+modal.querySelector('.x').addEventListener('click',closeModal);
+addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('on'))closeModal()});
+document.getElementById('resumeLink').addEventListener('click',e=>{
+  if(e.ctrlKey||e.metaKey||e.shiftKey||e.button!==0)return;
+  e.preventDefault();
+  const f=document.createElement('iframe');f.src='resume.pdf';f.title='Resume preview';
+  openModal('Resume.pdf','resume.pdf',f,'resume.pdf')});
+document.querySelectorAll('.proj').forEach(p=>{
+  const name=p.querySelector('.nm').textContent,d=LINKS[name]||{},url=d.url||'https://github.com/YOUR-GITHUB-USERNAME';
+  const desc=p.querySelector('.more p').textContent,tags=p.dataset.t.split(' ');
+  const acts=document.createElement('div');acts.className='acts';
+  const b=document.createElement('button');b.type='button';b.className='act';b.textContent='Preview';
+  const a=document.createElement('a');a.className='act';a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='Open in new tab ↗';
+  acts.append(b,a);p.querySelector('.more>div').append(acts);
+  b.addEventListener('click',()=>{
+    let el;
+    if(d.embed){el=document.createElement('iframe');el.src=d.embed;el.title=name+' preview'}
+    else{el=document.createElement('div');el.className='card';el.style.setProperty('--c',CC[tags[0]]);
+      if(d.img){const im=document.createElement('img');im.src=d.img;im.alt=name+' screenshot';el.append(im)}
+      else{const sh=document.createElement('div');sh.className='shot';sh.textContent=name;el.append(sh)}
+      const pp=document.createElement('p');pp.textContent=desc;
+      const tg=document.createElement('div');tg.className='tags';
+      tags.forEach(t=>{const s=document.createElement('span');s.textContent=t;s.style.setProperty('--c',CC[t]);tg.append(s)});
+      el.append(pp,tg)}
+    openModal(name,url,el)});
+});
 const roles=['car enthusiast','computer troubleshooter','trail buddy','weekend mechanic','problem solver'];
 const el=document.getElementById('typed');let ri=0,ci=0,del=false;
 function type(){const w=roles[ri];
