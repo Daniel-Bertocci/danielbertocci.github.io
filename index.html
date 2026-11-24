@@ -23,12 +23,22 @@ nav a{color:var(--dim);transition:color .25s}
 nav a:hover{color:var(--lamp)}
 .hero{position:relative;height:100svh;min-height:100dvh;overflow:hidden}
 #c{position:absolute;inset:0;display:block;width:100%;height:100%}
-.hero .txt{position:absolute;left:clamp(20px,5vw,64px);top:20vh;pointer-events:none;z-index:2}
-.hero h1{margin:0;font-size:clamp(2.8rem,9vw,7.5rem);line-height:.95;font-weight:800;font-stretch:75%;letter-spacing:-.02em;transition:font-stretch .8s cubic-bezier(.2,.8,.2,1);background:linear-gradient(100deg,#ffe29a,#ff8a3d 55%,#ff5f6d);-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:.08em}
+.hero .txt{position:absolute;left:clamp(20px,5vw,64px);top:84px;pointer-events:none;z-index:2;max-width:calc(100% - 2*clamp(20px,5vw,64px));display:flex;flex-direction:column;align-items:flex-start}
+.hero .box{width:min(390px,calc(100vw - 2*clamp(20px,5vw,64px)));position:relative;overflow:hidden;background:#fff;border:1px solid rgba(0,0,0,.18);border-radius:12px;box-shadow:0 30px 80px rgba(0,0,0,.55),0 0 0 .5px rgba(255,255,255,.15)}
+.bar{display:flex;align-items:center;gap:1rem;padding:8px 12px;background:linear-gradient(#f1f1f3,#e4e4e7);border-bottom:1px solid #cfcfd4}
+.dots{display:flex;gap:8px}
+.dots i{width:10px;height:10px;border-radius:50%;background:#ff5f57;border:.5px solid rgba(0,0,0,.15)}.dots i:nth-child(2){background:#febc2e}.dots i:nth-child(3){background:#28c840}
+.body{padding:1rem 1.4rem 1.3rem}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:90px;background:linear-gradient(transparent,var(--bg));pointer-events:none;z-index:1}
+.hero h1{margin:0;font-size:clamp(1.7rem,6vw,2.6rem);line-height:.95;font-weight:800;font-stretch:75%;letter-spacing:-.02em;transition:font-stretch .8s cubic-bezier(.2,.8,.2,1);background:linear-gradient(100deg,#f08c00,#e8590c 50%,#d6336c);-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:.08em}
 .hero.rev h1{font-stretch:118%}
-.hero p{margin:1rem 0 1.6rem;color:var(--dim);font-size:clamp(1rem,2vw,1.3rem)}
-.hero .cta{pointer-events:auto;display:inline-block;border-bottom:1px solid var(--lamp);color:var(--lamp);padding-bottom:2px;transition:letter-spacing .3s}
-.hero .cta:hover{letter-spacing:.06em}
+.hi{color:#6e6e73;font-size:.9rem;margin-bottom:.3rem}
+.typed{color:#d9480f;font-weight:600}
+.caret{display:inline-block;width:2px;height:1.1em;background:#d9480f;margin-left:3px;vertical-align:-.15em;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.hero p{margin:.7rem 0 0;color:#6e6e73;font-size:clamp(.92rem,1.5vw,1.05rem)}
+.hero .cta{pointer-events:auto;display:inline-block;margin-left:auto;padding:3px 11px;border:1px solid #fdba74;border-radius:999px;background:#fff4e6;color:#c2410c;font-size:.8rem;font-weight:600;transition:background .25s,color .25s,transform .25s}
+.hero .cta:hover{background:#e8590c;color:#fff;transform:translateY(-1px)}
 .hint{position:absolute;right:clamp(20px,5vw,64px);bottom:22px;color:var(--dim);font-size:.85rem;z-index:2;pointer-events:none}
 .wrap{max-width:900px;margin:0 auto;padding:0 clamp(20px,5vw,40px)}
 h2{font-size:1.1rem;font-weight:600;color:var(--dim);margin:0 0 1.2rem}
@@ -63,8 +73,8 @@ h2{font-size:1.1rem;font-weight:600;color:var(--dim);margin:0 0 1.2rem}
 .ext a:hover{color:var(--lamp);padding-left:12px}
 footer{padding:6vh 0 10vh;color:var(--dim);font-size:.9rem;display:flex;justify-content:space-between}
 footer a:hover{color:var(--lamp)}
-@media(max-width:600px){.proj .ds{display:none}nav div{gap:1rem}.hero .txt{top:16vh}}
-@media(prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;scroll-behavior:auto!important}}
+@media(max-width:600px){.proj .ds{display:none}nav div{gap:1rem}.hero .txt{top:76px}.hero p{min-height:2.9em}.body{padding:.9rem 1.1rem 1.1rem}}
+@media(prefers-reduced-motion:reduce){.caret{animation:none}*{transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
@@ -74,9 +84,14 @@ footer a:hover{color:var(--lamp)}
 <header class="hero" id="hero">
   <canvas id="c" aria-label="Animated ASCII campsite with a tent and campfire under the stars"></canvas>
   <div class="txt">
+    <div class="box">
+    <div class="bar"><div class="dots" aria-hidden="true"><i></i><i></i><i></i></div><a class="cta" href="#work">View projects ↓</a></div>
+    <div class="body">
+    <div class="hi">Hello, I'm</div>
     <h1>Daniel Bertocci</h1>
-    <p>Cars, computers, and getting outside.</p>
-    <a class="cta" href="#work">View projects ↓</a>
+    <p aria-label="I can be your car enthusiast, computer troubleshooter, trail buddy, weekend mechanic, or problem solver.">I can be your <span class="typed" id="typed"></span><span class="caret" aria-hidden="true"></span></p>
+    </div>
+    </div>
   </div>
 </header>
 
@@ -149,18 +164,21 @@ function frame(dt){
   moonGlow.addColorStop(.35,'rgba(205,215,235,.10)');
   moonGlow.addColorStop(1,'rgba(120,150,220,0)');
   ctx.fillStyle=moonGlow;ctx.fillRect(0,0,W,H);
-  ctx.beginPath();
-  ctx.arc(moonX,moonY,moonR*.58,0,Math.PI*2);
-  ctx.fillStyle='#d9d9d2';
-  ctx.fill();
   const g=[],k=[];for(let r=0;r<rows;r++){g.push(new Array(cols).fill(' '));k.push(new Array(cols).fill(''))}
   const put=(r,c,ch,col)=>{if(r>=0&&r<rows&&c>=0&&c<cols){g[r][c]=ch;k[r][c]=col}};
   stars.forEach(s=>{const sx=s[0]*W,sy=s[1]*H;if(Math.hypot(sx-moonX,sy-moonY)>moonR*.6){const tw=Math.sin(t*.003+s[2])>.1;put(Math.floor(s[1]*rows),Math.floor(s[0]*cols),tw?'*':'.',tw?'#d4e6ff':'#6f7fb0')}});
-  [[-.25,-.22],[.12,-.25],[-.30,.08],[.18,.12],[-.02,.28]].forEach(([ox,oy],i)=>{
-    if(Math.sin(t*.008+i*1.8)>.05){
-      put(Math.round((moonY+oy*moonR)/ch),Math.round((moonX+ox*moonR)/cw),'✦','#ffffff');
-    }
-  });
+  const moonArt=[
+    "     ####     ",
+    "   ########   ",
+    "  ##########  ",
+    " ############ ",
+    " ############ ",
+    "  ##########  ",
+    "   ########   ",
+    "     ####     "
+  ];
+  const moonCol=Math.round(moonX/cw)-7,moonRow=Math.round(moonY/ch)-4;
+  moonArt.forEach((ln,i)=>[...ln].forEach((x,j)=>{if(x==='#')put(moonRow+i,moonCol+j,'#','#d9d9d2')}));
   const gr=Math.floor(rows*.86);
   layers.forEach(L=>{for(let c=0;c<cols;c++){const top=ridge(L,c);for(let r=Math.max(top,0);r<gr;r++)put(r,c,r===top?(c%2?'/':'\\'):L.ch,L.c)}});
   for(let r=gr;r<rows;r++)for(let c=0;c<cols;c++)put(r,c,r===gr?'_':((r+c)%3?',':'.'),r===gr?'#4a9a70':'#2f5a45');
@@ -189,6 +207,12 @@ function frame(dt){
 let last=performance.now();
 function loop(n){const dt=Math.min(50,n-last);last=n;frame(dt);if(!reduce)requestAnimationFrame(loop)}
 frame(16);if(!reduce)requestAnimationFrame(loop);
+const roles=['car enthusiast','computer troubleshooter','trail buddy','weekend mechanic','problem solver'];
+const el=document.getElementById('typed');let ri=0,ci=0,del=false;
+function type(){const w=roles[ri];
+  if(!del){ci++;el.textContent=w.slice(0,ci);if(ci===w.length){del=true;return setTimeout(type,1600)}return setTimeout(type,85)}
+  ci--;el.textContent=w.slice(0,ci);if(ci===0){del=false;ri=(ri+1)%roles.length;return setTimeout(type,350)}setTimeout(type,45)}
+if(reduce)el.textContent=roles[0];else type();
 const CC={all:'#ff9a3c',cars:'#ff6b5b',code:'#6cb6ff',outdoors:'#6fd08c'};
 document.querySelectorAll('.proj').forEach(p=>p.style.setProperty('--c',CC[p.dataset.t.split(' ')[0]]));
 document.querySelectorAll('.filters button').forEach(b=>b.style.setProperty('--c',CC[b.dataset.f]));
