@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Daniel Bertocci | Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#000;--fg:#eceef7;--dim:#8791ad;--line:rgba(150,165,220,.16);--lamp:#ff9a3c;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+body.day{--bg:#fff;--fg:#14212b;--dim:#4d6878;--line:rgba(39,76,96,.2);--lamp:#d97706;color-scheme:light}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Archivo',system-ui,sans-serif;line-height:1.55;overflow-x:hidden;transition:background .45s,color .45s}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--lamp);outline-offset:3px}
+nav{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:18px clamp(20px,5vw,64px);
+background:linear-gradient(var(--bg),transparent)}
+nav .logo{font-weight:700;font-stretch:90%}
+nav div{display:flex;gap:1.6rem}
+nav a{color:var(--dim);transition:color .25s}
+nav a:hover{color:var(--lamp)}
+.theme-toggle{display:inline-flex;align-items:center;gap:6px;border:0;padding:0;background:none;color:var(--dim);font:inherit;font-size:.78rem;cursor:pointer}
+.toggle-icon{width:14px;text-align:center}
+.toggle-track{position:relative;width:34px;height:18px;border:1px solid var(--line);border-radius:999px;background:#202838;transition:background .3s,border-color .3s}
+.toggle-thumb{position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#cbd5e1;box-shadow:0 1px 3px rgba(0,0,0,.35);transition:transform .3s,background .3s}
+.theme-toggle.is-day .toggle-track{background:#f59e0b;border-color:#f59e0b}
+.theme-toggle.is-day .toggle-thumb{transform:translateX(16px);background:#fff7d6}
+.theme-toggle:hover .toggle-track{border-color:var(--lamp)}
+.hero{position:relative;height:100svh;min-height:100dvh;overflow:hidden;background:var(--bg);transition:background .45s}
+body.day .hero{background:#123a18}
+body:not(.day) .hero{background:#12308a}
+body.day nav{background:linear-gradient(rgba(8,28,10,.88),rgba(8,28,10,0))}
+body.day nav .logo{color:#f1f7e4}
+body.day nav a,body.day .theme-toggle{color:#dcecc8}
+body.day nav a:hover{color:#ffb454}
+body.day .hint{color:#3b5a3a}
+#c{position:absolute;inset:0;display:block;width:100%;height:100%}
+.hero .txt{position:absolute;left:clamp(20px,5vw,64px);top:84px;pointer-events:none;z-index:2;max-width:calc(100% - 2*clamp(20px,5vw,64px));display:flex;flex-direction:column;align-items:flex-start}
+.hero .box{width:min(390px,calc(100vw - 2*clamp(20px,5vw,64px)));position:relative;overflow:hidden;background:#fff;border:1px solid rgba(0,0,0,.18);border-radius:12px;box-shadow:0 30px 80px rgba(0,0,0,.55),0 0 0 .5px rgba(255,255,255,.15)}
+.bar{display:flex;align-items:center;gap:1rem;padding:8px 12px;background:linear-gradient(#f1f1f3,#e4e4e7);border-bottom:1px solid #cfcfd4}
+.dots{display:flex;gap:8px}
+.dots i{width:10px;height:10px;border-radius:50%;background:#ff5f57;border:.5px solid rgba(0,0,0,.15)}.dots i:nth-child(2){background:#febc2e}.dots i:nth-child(3){background:#28c840}
+.body{padding:1rem 1.4rem 1.3rem}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:90px;background:linear-gradient(transparent,var(--bg));pointer-events:none;z-index:1}
+.hero h1{margin:0;font-size:clamp(1.7rem,6vw,2.6rem);line-height:.95;font-weight:800;font-stretch:75%;letter-spacing:-.02em;transition:font-stretch .8s cubic-bezier(.2,.8,.2,1);background:linear-gradient(100deg,#f08c00,#e8590c 50%,#d6336c);-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:.08em}
+.hero.rev h1{font-stretch:118%}
+.hi{color:#6e6e73;font-size:.9rem;margin-bottom:.3rem}
+.typed{color:#d9480f;font-weight:600;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+.caret{display:inline-block;width:2px;height:1.1em;background:#d9480f;margin-left:3px;vertical-align:-.15em;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.hero p{margin:.7rem 0 0;color:#6e6e73;font-size:clamp(.92rem,1.5vw,1.05rem)}
+.hero .cta{pointer-events:auto;display:inline-block;margin-left:auto;padding:3px 11px;border:1px solid #fdba74;border-radius:999px;background:#fff4e6;color:#c2410c;font-size:.8rem;font-weight:600;transition:background .25s,color .25s,transform .25s}
+.hero .cta:hover{background:#e8590c;color:#fff;transform:translateY(-1px)}
+.hint{position:absolute;right:clamp(20px,5vw,64px);bottom:22px;color:var(--dim);font-size:.85rem;z-index:2;pointer-events:none}
+.wrap{max-width:900px;margin:0 auto;padding:0 clamp(20px,5vw,40px)}
+h2{font-size:1.1rem;font-weight:600;color:var(--dim);margin:0 0 1.2rem}
+#work{padding:12vh 0 6vh}
+.filters{display:flex;gap:1.2rem;margin-bottom:1.4rem}
+.filters button{background:none;border:0;padding:0 0 3px;font:inherit;color:var(--dim);cursor:pointer;border-bottom:1px solid transparent;transition:color .25s,border-color .25s}
+.filters button:hover{color:var(--fg)}
+.filters button[aria-pressed=true]{color:var(--c);border-color:var(--c)}
+.proj{border-top:1px solid var(--line);transition:opacity .4s}
+.proj:last-child{border-bottom:1px solid var(--line)}
+.proj.hide{display:none}
+.proj button{all:unset;box-sizing:border-box;width:100%;display:flex;align-items:baseline;gap:1rem;padding:1.1rem 0;cursor:pointer}
+.proj .pl{font-size:1.3rem;color:var(--c,var(--lamp));width:1.2rem;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.proj .nm{font-size:clamp(1.2rem,3vw,1.7rem);font-weight:700;font-stretch:80%;transition:transform .35s cubic-bezier(.2,.8,.2,1),font-stretch .5s}
+.proj .ds{color:var(--dim);margin-left:auto;text-align:right}
+.proj button:hover .nm,.proj button:focus-visible .nm{transform:translateX(10px);font-stretch:105%;color:var(--c,var(--lamp))}
+.proj.open .pl{transform:rotate(45deg)}
+.more{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s cubic-bezier(.2,.8,.2,1)}
+.proj.open .more{grid-template-rows:1fr}
+.more>div{overflow:hidden}
+.more p{margin:0 0 1.2rem 2.2rem;color:var(--dim);max-width:56ch}
+#about{padding:6vh 0}
+.abt{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.abt button{all:unset;box-sizing:border-box;width:100%;display:flex;gap:1rem;padding:1.1rem 0;cursor:pointer;font-size:1.3rem;font-weight:700;font-stretch:80%}
+.abt .pl{color:var(--lamp);transition:transform .4s}
+.abt.open .pl{transform:rotate(45deg)}
+.abt .more p{margin-left:2.2rem;color:var(--fg);font-size:1.05rem}
+.ext{padding:6vh 0}
+.ext a{display:flex;justify-content:space-between;gap:1rem;padding:.9rem 0;border-top:1px solid var(--line);transition:padding .3s,color .3s}
+.ext a:last-child{border-bottom:1px solid var(--line)}
+.ext a span{color:var(--dim)}
+.ext a:hover{color:var(--lamp);padding-left:12px}
+footer{padding:6vh 0 10vh;color:var(--dim);font-size:.9rem;display:flex;justify-content:space-between}
+footer a:hover{color:var(--lamp)}
+@media(max-width:600px){.proj .ds{display:none}nav div{gap:1rem}.hero .txt{top:76px}.hero p{min-height:2.9em}.body{padding:.9rem 1.1rem 1.1rem}}
+@media(prefers-reduced-motion:reduce){.caret{animation:none}*{transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<nav id="top"><a class="logo" href="#top">Daniel Bertocci</a>
+<div><a href="#work">projects</a><a href="#about">about</a><a href="#contact">contact</a><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to daytime theme" aria-pressed="false"><span class="toggle-icon" aria-hidden="true">☾</span><span class="toggle-track" aria-hidden="true"><span class="toggle-thumb"></span></span><span class="toggle-label">night</span></button></div></nav>
+
+<header class="hero" id="hero">
+  <canvas id="c" aria-label="Animated ASCII campsite with a tent and campfire under the stars"></canvas>
+  <div class="txt">
+    <div class="box">
+    <div class="bar"><div class="dots" aria-hidden="true"><i></i><i></i><i></i></div><a class="cta" href="#work">View projects ↓</a></div>
+    <div class="body">
+    <div class="hi">Hello, I'm</div>
+    <h1>Daniel Bertocci</h1>
+    <p aria-label="I can be your car enthusiast, computer troubleshooter, trail buddy, weekend mechanic, or problem solver.">I can be your <span class="typed" id="typed"></span><span class="caret" aria-hidden="true"></span></p>
+    </div>
+    </div>
+  </div>
+</header>
+
+<section id="work"><div class="wrap">
+  <h2>Projects</h2>
+  <div class="filters" role="group" aria-label="Filter projects">
+    <button aria-pressed="true" data-f="all">all</button><button aria-pressed="false" data-f="cars">cars</button><button aria-pressed="false" data-f="code">code</button><button aria-pressed="false" data-f="outdoors">outdoors</button>
+  </div>
+  <div id="list">
+    <div class="proj" data-t="cars code"><button aria-expanded="false"><span class="pl">+</span><span class="nm">Garage Log</span><span class="ds">car maintenance tracker</span></button><div class="more"><div><p>A simple place to track maintenance, repairs, upgrades, and the next project waiting in the garage.</p></div></div></div>
+    <div class="proj" data-t="code"><button aria-expanded="false"><span class="pl">+</span><span class="nm">Personal Website</span><span class="ds">this site · ascii campsite</span></button><div class="more"><div><p>A hand-built portfolio with a lightweight animated ASCII campsite and a responsive layout.</p></div></div></div>
+    <div class="proj" data-t="code"><button aria-expanded="false"><span class="pl">+</span><span class="nm">Home Server</span><span class="ds">self-hosted lab</span></button><div class="more"><div><p>A hands-on lab for learning hardware, networking, system administration, and how all the pieces fit together.</p></div></div></div>
+    <div class="proj" data-t="cars code"><button aria-expanded="false"><span class="pl">+</span><span class="nm">Track Day Timer</span><span class="ds">lap data viewer</span></button><div class="more"><div><p>A concept for organizing lap times, comparing runs, and turning track-day data into something useful.</p></div></div></div>
+    <div class="proj" data-t="outdoors code"><button aria-expanded="false"><span class="pl">+</span><span class="nm">Trail Planner</span><span class="ds">routes &amp; gear lists</span></button><div class="more"><div><p>A planning tool for outdoor trips, with room for routes, distance, elevation, gear, and the details that make a day outside better.</p></div></div></div>
+    <div class="proj" data-t="cars"><button aria-expanded="false"><span class="pl">+</span><span class="nm">Weekend Builds</span><span class="ds">repairs &amp; upgrades</span></button><div class="more"><div><p>Add the jobs you've done on your car, with a photo or two.</p></div></div></div>
+    <div class="proj" data-t="outdoors"><button aria-expanded="false"><span class="pl">+</span><span class="nm">Summit Log</span><span class="ds">hikes &amp; camps</span></button><div class="more"><div><p>Your favorite trails, where they are, and why they stuck with you.</p></div></div></div>
+  </div>
+</div></section>
+
+<section id="about"><div class="wrap">
+  <div class="abt"><button aria-expanded="false"><span class="pl">+</span>About me</button>
+  <div class="more"><div><p>I'm Daniel Bertocci. I enjoy cars, computers, technology, and spending time outdoors. I like learning by building, troubleshooting, and figuring out how things fit together.</p></div></div></div>
+</div></section>
+
+<section class="ext" id="contact"><div class="wrap">
+  <h2>Elsewhere</h2>
+  <a href="resume.pdf"><b>Resume</b><span>one-page PDF</span></a>
+  <a href="https://github.com/YOUR-GITHUB-USERNAME" target="_blank" rel="noopener"><b>GitHub</b><span>projects &amp; code</span></a>
+  <a href="https://www.instagram.com/YOUR-INSTAGRAM-USERNAME" target="_blank" rel="noopener"><b>Instagram</b><span>photos &amp; outdoors</span></a>
+  <a href="mailto:YOUR-EMAIL@example.com"><b>Email</b><span>YOUR-EMAIL@example.com</span></a>
+  <footer><span>© 2026 Daniel Bertocci · California</span><a href="#top">back to top ↑</a></footer>
+</div></section>
+
+<script>
+(function(){
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const hero=document.getElementById('hero'),cv=document.getElementById('c'),ctx=cv.getContext('2d');
+let W,H,cols,rows,cw=10,ch=16,dpr=1,px=0,t=0;
+function size(){
+  dpr=Math.min(devicePixelRatio||1,2);W=Math.max(1,hero.clientWidth);H=Math.max(1,hero.clientHeight);
+  cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+  cw=W<600?8:10;ch=Math.round(cw*1.6);cols=Math.ceil(W/cw);rows=Math.ceil(H/ch);
+  ctx.font=cw*1.6*.82+'px ui-monospace,Menlo,Consolas,monospace';ctx.textBaseline='top';
+}
+size();addEventListener('resize',()=>{size();frame(0)});
+const layers=[
+  {ch:'.',base:.66,depth:.20,sp:.3,c:'#7c8490',peaks:[[.08,.13,.16],[.28,.18,.12],[.50,.15,.14],[.72,.20,.13],[.93,.14,.16]]},
+  {ch:':',base:.75,depth:.24,sp:.8,c:'#59616d',peaks:[[.02,.18,.14],[.20,.24,.13],[.43,.19,.16],[.68,.27,.14],[.88,.21,.13]]},
+  {ch:'#',base:.84,depth:.20,sp:1.6,c:'#39414d',peaks:[[.10,.15,.12],[.34,.22,.14],[.58,.17,.12],[.80,.23,.14],[1.00,.16,.12]]}
+];
+const stars=[];for(let i=0;i<90;i++)stars.push([Math.random(),Math.random()*.38,Math.random()*6]);
+const sparks=[];
+let day=false;
+const body=document.body,themeToggle=document.getElementById('themeToggle');
+function ridge(L,x){
+  const n=Math.max(0,Math.min(1,(x/Math.max(cols-1,1))+px*L.sp*.001));
+  let height=L.base;
+  L.peaks.forEach(([center,depth,width])=>{
+    const distance=Math.abs(n-center);
+    const peak=Math.max(0,1-distance/width);
+    height-=peak*depth;
+  });
+  return Math.round(rows*height);}
+const rnd=n=>{const x=Math.sin(n*12.9898+78.233)*43758.5453;return x-Math.floor(x)};
+const wind=(c,ph)=>Math.max(-1,Math.min(1,Math.sin(t*.0021-c*.05+ph)*.65+Math.sin(t*.0053-c*.12+ph*1.7)*.35+.12));
+const FL=['#ff7eb6','#ffd23d','#f4f4ff','#b48cff','#ff8a5b'];
+const BL=[['#2b6e4c','#3f9a6c','#6fd9a0'],['#2f7a52','#4aa876','#8be8b4'],['#24604a','#378a63','#5fc592']];
+// ---- Daytime garden: drawn only with colored text characters ----
+const garden={key:'',cv:null,anim:[]};
+function buildGarden(key){
+  const hash=(a,b)=>{const x=Math.sin(a*127.1+b*311.7)*43758.5453;return x-Math.floor(x)};
+  const lerp=(a,b,x)=>a+(b-a)*x,clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+  const pick=(a,x)=>a[Math.min(a.length-1,Math.max(0,Math.floor(x*a.length)))];
+  const g=[],k=[],am=[];
+  for(let r=0;r<rows;r++){g.push(new Array(cols).fill(' '));k.push(new Array(cols).fill(''));am.push(new Array(cols).fill(null))}
+  const set=(r,c,gl,col,a)=>{if(r>=0&&r<rows&&c>=0&&c<cols){g[r][c]=gl;k[r][c]=col;am[r][c]=a||null}};
+  const paint=(u0,v0,u1,v1,fn)=>{
+    const r0=Math.max(0,Math.floor(v0*rows)),r1=Math.min(rows-1,Math.ceil(v1*rows));
+    const c0=Math.max(0,Math.floor(u0*cols)),c1=Math.min(cols-1,Math.ceil(u1*cols));
+    for(let r=r0;r<=r1;r++)for(let c=c0;c<=c1;c++){
+      const u=(c+.5)/cols,v=(r+.5)/rows,h=hash(c,r),res=fn(u,v,h,r,c);
+      if(res)set(r,c,res[0],res[1],res[2]);
+    }};
+  const blob=(cx,cy,rx,ry,fn,edge=.35)=>paint(cx-rx*1.3,cy-ry*1.3,cx+rx*1.3,cy+ry*1.3,(u,v,h,r,c)=>{
+    const d=((u-cx)/rx)**2+((v-cy)/ry)**2;
+    if(d>1+(h-.5)*edge)return null;
+    return fn(u,v,h,d,r,c,(u-cx)/rx,(v-cy)/ry);
+  });
+  const line=(u1,v1,u2,v2,col)=>{
+    const x1=u1*cols,y1=v1*rows,x2=u2*cols,y2=v2*rows,dx=x2-x1,dy=y2-y1,n=Math.ceil(Math.max(Math.abs(dx),Math.abs(dy))*1.6)+1;
+    const gl=Math.abs(dx)<Math.abs(dy)*.4?'|':(dx*dy<0?'/':'\\');
+    for(let i=0;i<=n;i++)set(Math.round(y1+dy*i/n),Math.round(x1+dx*i/n),gl,col);
+  };
+
+  // 1. Broadleaf canopy filling the whole backdrop
+  const canopy=['#14401a','#1d5c23','#2d7d2a','#3f9a30','#5cb83a','#8ad24a'];
+  paint(0,0,1,.82,(u,v,h)=>{
+    const n=Math.sin(u*14+Math.sin(v*9)*2)+Math.sin(v*17-u*5)*.8+Math.sin((u+v)*31)*.5;
+    const s=clamp((n+2.3)/4.6*.85+(h-.5)*.4,0,1);
+    return [pick(['%','&','@','8','#','W','M'],(h*53)%1),pick(canopy,s)];
+  });
+
+  // 2. Tall arborvitae hedge: bright lime on the left, deepening to the right
+  const hedgeLime=['#3fa72b','#58c235','#7bd640','#a0e955'],hedgeMid=['#2a7a2c','#38952f','#4cae38','#62c446'],hedgeDark=['#1a5a27','#237335','#2f8c40','#3ea04c'];
+  paint(.03,.2,1,.8,(u,v,h,r,c)=>{
+    const top=u<.62?.27+.05*Math.sin(u*37)+.03*Math.sin(u*91):.3+.04*Math.sin(u*29);
+    if(v<top)return null;
+    const f=clamp((Math.sin(c*.9+Math.sin(r*.7)*2)+1)/2*.7+(h-.5)*.5,0,.999);
+    const pal=u<.3?hedgeLime:u<.46?hedgeMid:u<.66?hedgeDark:hedgeMid;
+    return [pick(['%','&','@','8','#','W','/','\\','M'],(h*91)%1),pick(pal,f)];
+  });
+
+  // 3. (sky and spruces removed: canopy foliage continues across the top)
+  // 4. Tree trunks at the left
+  paint(0,0,.06,.4,(u,v,h)=>{
+    if(u>.048-v*.03+(h-.5)*.008)return null;
+    return [pick(['|','H','I','#'],h),u<.015?'#6a6153':u<.03?'#8a806e':'#a89e8a'];
+  });
+  paint(.15,0,.2,.2,(u,v,h)=>Math.abs(u-(.19-v*.1))<.012?[h>.7?'/':'|',h>.5?'#9a7f64':'#7a634e']:null);
+
+  // 5. Ornamental grass clumps behind the bench (gently swaying)
+  const grassBand=u=>u>=.1&&u<.3?.59+.02*Math.sin(u*80):u>=.3&&u<.43?.665:u>=.43&&u<.56?.60+.02*Math.sin(u*70):u>=.56&&u<.78?.645+.015*Math.sin(u*90):u>=.86?.56+.03*Math.sin(u*60):9;
+  paint(.1,.52,1,.76,(u,v,h)=>{
+    if(v<grassBand(u)||v>.74)return null;
+    const pal=u<.3?['#3f8a58','#52a068','#6cb97c']:u<.43?['#5f9f74','#7ab88c','#9ad0a8']:u<.56?['#7fb38a','#a2cfaa','#c6e3c9']:u<.78?['#bcd8bb','#dcebd8','#f0f7ea','#8fbd9a']:['#74aa72','#8cc287','#5f9462'];
+    return [h>.55?'|':'l',pick(pal,(h*37)%1),h<.5?{t:'grass',ph:h*6.28}:null];
+  });
+
+  // 6. Mulch beds
+  paint(0,.72,1,1,(u,v,h)=>{
+    const wood=h>.93;
+    return [pick([':',';','%',',','='],(h*19)%1),wood?'#a07c58':pick(['#4a3424','#5e422f','#704f38','#3a281d'],(h*31)%1)];
+  });
+
+  // 7. Flagstone patio with creeping lime groundcover between the stones
+  const pat=[[.70,.17,.66],[.78,.13,.62],[.86,.22,.52],[.92,.27,.50],[1,.27,.49]];
+  const span=v=>{for(let i=0;i<pat.length-1;i++)if(v<=pat[i+1][0]){const f=(v-pat[i][0])/(pat[i+1][0]-pat[i][0]);return[lerp(pat[i][1],pat[i+1][1],f),lerp(pat[i][2],pat[i+1][2],f)]}return[pat[4][1],pat[4][2]]};
+  const stones=[[.19,.775,.07,.03],[.25,.76,.05,.025],[.33,.72,.05,.013],[.40,.742,.06,.015],[.30,.745,.04,.012],[.48,.73,.05,.013],[.36,.79,.09,.022],[.375,.84,.09,.03],[.38,.93,.11,.027],[.52,.77,.04,.02],[.60,.715,.045,.01],[.55,.735,.03,.01],[.45,.765,.04,.015],[.34,.885,.08,.015]];
+  const stonePal=['#b4b7b3','#bfbdb0','#a8acaf','#c8c5b6'];
+  paint(.1,.70,.7,1,(u,v,h,r,c)=>{
+    const [a,b]=span(v);
+    if(v<.70||u<a+(h-.5)*.02||u>b+(h-.5)*.02)return null;
+    for(let i=0;i<stones.length;i++){
+      const s=stones[i],d=((u-s[0])/s[2])**2+((v-s[1])/s[3])**2;
+      if(d<1+(h-.5)*.18){
+        const lit=((u-.37)/.11)**2+((v-.84)/.045)**2<1;
+        return [pick(['=','#','=','%','&'],(h*11)%1),lit?pick(['#d4d3c6','#e6e3d4','#c9c8bb'],(h*17)%1):stonePal[i%4]];
+      }
+    }
+    return [pick(['"','*','"','%','&'],(h*19)%1),pick(v<.74?['#7cc82c','#9be035']:['#9be035','#b6f044','#7cc82c','#d2f860'],(h*41)%1)];
+  });
+
+  // 8. Stone slab bench
+  paint(.30-1/cols,.64,.42,.672,(u,v,h)=>{
+    if(v>.662)return null;
+    return v<.652?['=',pick(['#c8cdd0','#d6dadc','#b9bec2'],h)]:['#',pick(['#9aa0a6','#8b9197'],h)];
+  });
+  {const lr=Math.floor(.662*rows-.5);
+  for(const lu of [.325,.385]){const lc=Math.floor(lu*cols);
+    for(let i=1;i<=2;i++)for(let j=0;j<2;j++)set(lr+i,lc+j,'H',(i+j)%2?'#a0693f':'#7a4a2a');}}
+
+  // 9. Dark shrub at left, plus yellow-green spirea
+  blob(.055,.76,.062,.09,(u,v,h)=>h>.97?['"','#9bd36f']:[pick(['@','%','&','8'],(h*7)%1),pick(['#1a4a22','#256a2c','#378a36','#4ca443'],(h*13)%1)]);
+  const spirea=['#a9c43a','#c9dc4a','#e3ea6a','#d9a93e'];
+  for(const [cx,cy,rx,ry] of [[.065,.84,.04,.065],[.2,.83,.035,.04],[.135,.79,.02,.02]])
+    blob(cx,cy,rx,ry,(u,v,h)=>[pick(['*','"','%','x'],(h*7)%1),pick(spirea,(h*13)%1)],.5);
+
+  // 10. Hakone grass mounds
+  const moundPal=['#3a8a2c','#4fac35','#6fcc40','#97e255','#c0f27a'];
+  for(const [cx,cy,rx,ry] of [[.69,.69,.058,.062],[.815,.69,.072,.072]])
+    blob(cx,cy,rx,ry,(u,v,h,d,r,c,dx,dy)=>{
+      const s=clamp(.55-dy*.35-dx*.1+(h-.5)*.4,0,.999);
+      return [h>.7?pick(['W','M','V'],(h*9)%1):dx<-.3?'/':dx>.3?'\\':'|',pick(moundPal,s)];
+    });
+
+  // 11. Low junipers, golden creeping jenny, purple ajuga
+  for(const [cx,cy,rx,ry] of [[.60,.80,.05,.025],[.62,.73,.04,.018]])
+    blob(cx,cy,rx,ry,(u,v,h)=>[pick(['%','"','&'],(h*7)%1),pick(['#2a6240','#3a7c52','#4c966a'],(h*13)%1)],.5);
+  for(const [cx,cy,rx,ry] of [[.65,.845,.11,.04],[.82,.865,.07,.035]])
+    blob(cx,cy,rx,ry,(u,v,h)=>[pick(['%','*','&','/','\\','8'],(h*7)%1),pick(['#cce630','#e0f240','#f4fc66','#b0d428'],(h*13)%1)],.7);
+  for(const [cx,cy,rx,ry] of [[.745,.82,.04,.03],[.76,.865,.04,.035],[.9,.84,.035,.03]])
+    blob(cx,cy,rx,ry,(u,v,h)=>[pick(['&','%','8','@'],(h*7)%1),pick(['#5a3a64','#744c80','#8d63a0','#432a4c'],(h*13)%1)],.6);
+
+  // 12. Boulders
+  const rockPal=['#8b7060','#a58b78','#bda590','#d2bba8'];
+  for(const [cx,cy,rx,ry] of [[.545,.795,.075,.03],[.82,.805,.05,.02],[.975,.75,.03,.03]])
+    blob(cx,cy,rx,ry,(u,v,h,d,r,c,dx,dy)=>[pick(['#','@','%','&'],(h*7)%1),pick(rockPal,clamp(.6-dy*.4+(h-.5)*.4,0,.999))],.25);
+
+  // 13. Small green tufts in the beds
+  paint(.62,.76,1,.95,(u,v,h)=>h>.965?[pick(['"','|','/'],(h*97)%1),'#68b84e']:null);
+  paint(0,.84,.3,.97,(u,v,h)=>h>.97?[pick(['"','|','/'],(h*97)%1),'#68b84e']:null);
+
+  // 14. Japanese maple: trunk, branches, then airy red-orange foliage
+  const bark='#9a7458';
+  line(.722,.66,.722,.5,'#b08865');line(.729,.66,.729,.5,'#8c6a4f');line(.715,.66,.715,.52,'#6a4a3a');
+  for(const b of [[.722,.5,.69,.42],[.722,.5,.79,.4],[.69,.42,.6,.32],[.69,.42,.69,.3],[.79,.4,.86,.32],[.79,.4,.8,.27],[.74,.44,.74,.28],[.71,.5,.62,.45],[.76,.45,.83,.46]])line(b[0],b[1],b[2],b[3],bark);
+  const leafPal=['#6a2234','#9a2e26','#c4401e','#e0592a','#f27a34','#ffa050'];
+  blob(.72,.37,.205,.165,(u,v,h,d,r,c,dx,dy)=>{
+    if(h>.95||(h>.86&&dy>.3))return null;
+    const s=clamp(.55+dx*.22-dy*.3+(h-.5)*.35,0,.999);
+    const gl=pick(['@','%','&','#','M','W','8'],(h*7)%1);
+    return [gl,pick(leafPal,s),(h*53)%1<.25?{t:'leaf',ph:h*6.28,alt:'W',hi:'#ffb060'}:null];
+  },.5);
+
+  // 15. Bright lawn along the bottom
+  paint(0,.88,1,1,(u,v,h)=>{
+    if(u<.035||v<.965-.06*u)return null;
+    return [pick(['"','%','"','|','&'],(h*19)%1),pick(['#4cc232','#62d63e','#7de84e','#3aa82a','#96f35e'],(h*37)%1),h<.3?{t:'grass',ph:h*20}:null];
+  });
+
+  // Pre-render the still cells; swaying cells are drawn each frame
+  const anim=[];
+  for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const a=am[r][c];if(a){anim.push(Object.assign({r,c,gl:g[r][c],col:k[r][c]},a));g[r][c]=' '}}
+  const cv=document.createElement('canvas');cv.width=W*dpr;cv.height=H*dpr;
+  const o=cv.getContext('2d');o.setTransform(dpr,0,0,dpr,0,0);o.font='bold '+(cw*1.6*.82*1.12)+'px ui-monospace,Menlo,Consolas,monospace';o.textBaseline='top';
+  for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){if(g[r][c]===' ')continue;o.fillStyle=k[r][c];o.fillText(g[r][c],c*cw,r*ch)}
+  garden.key=key;garden.cv=cv;garden.anim=anim;
+}
+function drawGarden(){
+  const key=[cols,rows,W,H,dpr,cw].join();
+  if(garden.key!==key)buildGarden(key);
+  ctx.drawImage(garden.cv,0,0,W,H);
+  const f0=ctx.font;ctx.font='bold '+(cw*1.6*.82*1.12)+'px ui-monospace,Menlo,Consolas,monospace';
+  for(const a of garden.anim){
+    let gl=a.gl,col=a.col;
+    if(a.t==='grass'){const s=wind(a.c,a.ph);gl=s>.2?'\\':s<-.2?'/':'|'}
+    else if(Math.sin(t*.0035+a.ph*3+a.c*.3)>.8){gl=a.alt;col=a.hi}
+    ctx.fillStyle=col;ctx.fillText(gl,a.c*cw,a.r*ch);
+  }
+  ctx.font=f0;
+}
+// ---- Night: Golden Gate tower, city across the bay, bridge deck; colored text only ----
+const BLUES=['#bfe0ff','#7ab8ff','#4aa0ff'];
+const bridge={key:'',cv:null,lamps:[],blink:null,cables:[],paths:[],blinkers:[],stars:[]};
+function buildBridge(key){
+  const hash=(a,b)=>{const x=Math.sin(a*127.1+b*311.7)*43758.5453;return x-Math.floor(x)};
+  const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+  const pick=(a,x)=>a[Math.min(a.length-1,Math.max(0,Math.floor(x*a.length)))];
+  const g=[],k=[];
+  for(let r=0;r<rows;r++){g.push(new Array(cols).fill(' '));k.push(new Array(cols).fill(''))}
+  const set=(r,c,gl,col)=>{if(r>=0&&r<rows&&c>=0&&c<cols){g[r][c]=gl;k[r][c]=col}};
+  const paint=(u0,v0,u1,v1,fn)=>{
+    const r0=Math.max(0,Math.floor(v0*rows)),r1=Math.min(rows-1,Math.ceil(v1*rows));
+    const c0=Math.max(0,Math.floor(u0*cols)),c1=Math.min(cols-1,Math.ceil(u1*cols));
+    for(let r=r0;r<=r1;r++)for(let c=c0;c<=c1;c++){const res=fn((c+.5)/cols,(r+.5)/rows,hash(c,r),r,c);if(res)set(r,c,res[0],res[1])}};
+  const line=(u1,v1,u2,v2,col)=>{const x1=u1*cols,y1=v1*rows,dx=u2*cols-x1,dy=v2*rows-y1,n=Math.ceil(Math.max(Math.abs(dx),Math.abs(dy))*1.6)+1,
+    gl=Math.abs(dx)<Math.abs(dy)*.4?'|':(dx*dy<0?'/':'\\');
+    for(let i=0;i<=n;i++)set(Math.round(y1+dy*i/n),Math.round(x1+dx*i/n),gl,col)};
+  const lamps=[],blinkers=[],warm=['#ffb347','#ffd27a','#ff8a3c','#fff0c0'];
+  const lamp=(r,c,gl,col,big)=>lamps.push({r,c,gl,col,big,ph:hash(c,r)*6.28});
+
+  // Deep blue twilight sky
+  const skyPal=['#0c2a86','#123396','#1a3fa8','#2a4cb4'];
+  paint(0,0,1,.6,(u,v,h)=>h>.92?null:[pick([':','.',';',','],(h*9)%1),pick(skyPal,clamp(v/.5,0,.999)+(h-.5)*.25)]);
+  // Bay water: blue fading to violet and pink toward the bridge
+  const wPal=['#0a2a7a','#0e3488','#2a2e8a','#4a2e8c','#7a3490'];
+  paint(0,.585,1,.94,(u,v,h,r,c)=>[Math.sin(c*.5+r)>.3?'~':'-',pick(wPal,clamp((v-.585)/.355,0,.999)**1.2+(h-.5)*.2)]);
+  // Violet-pink horizon glow behind the city
+  paint(0,.3,1,.6,(u,v,h)=>h>.7?null:[pick([':','.',';'],(h*9)%1),pick(['#2a40b0','#3a46b0','#5a4cb0','#7a52ac','#9a58a8'],clamp((v-.3)/.3,0,.999)+(h-.5)*.15)]);
+  // Distant hills with scattered lights, a lit mast, and a string of far bridge lights
+  const hillTop=u=>.40+.04*Math.sin(u*9+1)-.03*Math.sin(u*23);
+  paint(0,.34,.56,.5,(u,v,h,r,c)=>{if(v<hillTop(u))return null;if(h>.88)lamp(r,c,'.',pick(warm,(h*50)%1));return [pick([':',';','%'],(h*7)%1),pick(['#2a2a6a','#222258','#32327a'],(h*9)%1)]});
+  line(.31,.30,.31,.40,'#ffd0c0');for(let i=-1;i<=1;i++)set(Math.floor(.34*rows),Math.floor(.31*cols)+i,'=','#ffd0c0');
+  blinkers.push({r:Math.floor(.295*rows),c:Math.floor(.31*cols),ph:1});
+  for(let c=0;c<Math.floor(.09*cols);c++){lamp(Math.floor(.385*rows),c,'o','#e8f0ff');if(c%2)lamp(Math.floor(.395*rows),c,'.','#bfd8ff')}
+  // City haze and window lights
+  paint(0,.36,1,.6,(u,v,h)=>h>.8?null:[pick([':',',',';'],(h*9)%1),pick(['#2b2a6a','#1f2458','#3a3470'],(h*7)%1)]);
+  for(let r=Math.floor(.4*rows);r<Math.floor(.58*rows);r++)for(let c=0;c<cols;c++){
+    const u=c/cols,v=r/rows;let p=.18+.5*Math.sin(Math.PI*(v-.4)/.18);
+    if(u<.4&&v>.52)p*=.12;
+    if(hash(c*3,r*7)<p)lamp(r,c,pick(['.','*','o','+',':'],hash(c,r*5)),hash(c*5,r)>.78?pick(['#bfe0ff','#7ab8ff','#4aa0ff'],hash(c,r)):pick(warm,hash(c,r*9)));
+  }
+  for(let r=Math.floor(.42*rows);r<Math.floor(.62*rows);r++)for(let c=0;c<cols;c++)if(hash(c*11,r*5)<.04)lamp(r,c,'*',pick(['#bfe0ff','#7ab8ff','#4aa0ff'],hash(c,r*3)));
+  // Buildings
+  const bl=[[.09,.16,.31],[.19,.26,.37],[.27,.34,.32],[.36,.42,.38],[.44,.52,.40],[.70,.75,.34],[.76,.82,.30],[.92,1,.26],[.85,.92,.34],[.79,.86,.40],[.66,.72,.40],[.05,.10,.42],[.13,.20,.44],[.30,.37,.44],[.68,.74,.44],[.95,1,.40],[.40,.46,.44],[.02,.07,.46],[.23,.29,.42],[.47,.53,.47],[.76,.80,.48],[.83,.87,.44],[.90,.95,.47]];
+  for(const [a,b,top] of bl)paint(a,top,b,.58,(u,v,h,r,c)=>{
+    if(v<top+.016)return ['=','#9ab0ff'];
+    if(h>.55&&(c+r)%2){lamp(r,c,'*',pick(['#ffb347','#ffd27a','#ff8a3c','#fff0c0','#7ab8ff','#4aa0ff','#bfe0ff'],(h*7)%1));return [' ','']}
+    return [pick(['#','H','=','%'],h),(u-a<.007)?'#a8baff':pick(['#5a70c8','#6a84dc','#4a5eb0'],(h*5)%1)]});
+  for(const [a,b,top] of bl)if(top<.38)blinkers.push({r:Math.floor(top*rows)-1,c:Math.floor((a+b)/2*cols),ph:a*20});
+  // Glass skyscraper and pyramid-spire tower
+  paint(.82,.18,.92,.36,(u,v,h)=>Math.abs(u-.87)<.035*(1-(.36-v)/.18*.45)?[pick(['#','M','H'],h),pick(['#bfe3ff','#8ac4ff','#5aa0f0'],(h*5)%1)]:null);
+  line(.87,.2,.87,.34,'#ffffff');blinkers.push({r:Math.floor(.175*rows),c:Math.floor(.87*cols),ph:2});
+  paint(.60,.24,.625,.34,(u,v,h)=>Math.abs(u-.611)<(v-.24)/.1*.009+.0015?['#',pick(['#e8f0ff','#c8d8ff'],h)]:null);
+  // Dark shoreline trees, white ferry building, shore lights
+  paint(0,.52,.4,.57,(u,v,h)=>h<.85?[pick(['^','%','&','#'],(h*3)%1),pick(['#10241a','#163020','#0c1a14'],(h*9)%1)]:null);
+  paint(0,.55,.38,.585,(u,v,h)=>h<.92?['=',v<.565?'#c8d8f0':'#8aa0c8']:null);
+  for(let c=Math.floor(.02*cols);c<Math.floor(.36*cols);c++)if(hash(c,4)<.25)lamp(Math.floor(.562*rows),c,'.','#ffe8b0');
+  for(let r=Math.floor(.6*rows);r<Math.floor(.8*rows);r++)for(let c=Math.floor(.38*cols);c<cols;c++){const v=r/rows;if(hash(c*7,r*3)<.09*(1-(v-.6)/.2))lamp(r,c,pick(['|',':','!'],hash(c,r)),pick(['#c8782a','#a85a30','#8a5090','#ffb070'],hash(r,c*2)))}
+  for(let c=Math.floor(.4*cols);c<cols;c++)if(hash(c,1)<.6)lamp(Math.floor(.565*rows),c,'o',pick(['#ff8a2a','#ffb347'],hash(c,2)));
+  // Dark hillside in the bottom-left corner
+  paint(0,.79,.5,1,(u,v,h)=>v<.8+.2*(u/.5)?null:(v<.815+.2*(u/.5))?['/',pick(['#4a4a7a','#3a3a6a'],h)]:[pick(['%','#','&','8'],h),pick(['#1a1a2a','#0e0e18','#222035'],(h*7)%1)]);
+  // Suspender cables, then the four main cables
+  const lowL=u=>.375-.225*u/.62,lowR=u=>.2+.135*(u-.675)/.325;
+  for(const u of [.06,.11,.17,.28,.40,.52,.70,.72,.78,.80,.86,.88,.94,.97]){
+    const c=Math.floor(u*cols),y0=Math.ceil((u<.6?lowL(u):lowR(u))*rows);
+    for(let r=y0;r<Math.floor(.90*rows);r++)set(r,c,'|','#e8301c')}
+  const cab=[[.575,.15,0,.325],[.62,.15,0,.375],[.675,.15,1,.30],[.675,.20,1,.335]];
+  for(const b of cab)line(b[0],b[1],b[2],b[3],'#ff3a1a');
+  // Bridge deck: light streaks, orange truss, lamps
+  paint(0,.90,1,.92,(u,v,h)=>['=',pick(['#ffd0a0','#ffe8c8','#ffb070'],(h*5)%1)]);
+  paint(0,.92,1,.97,(u,v,h,r,c)=>[(r+c)%2?'X':'/',pick(['#d9602a','#ff7a3a','#a8461a'],(h*3)%1)]);
+  for(const u of [.03,.09,.15,.21,.27,.33,.39,.45,.51,.6,.66,.72,.78,.84,.90,.96]){const lr=Math.floor(.89*rows),lc=Math.floor(u*cols);lamp(lr,lc,'o','#ffa040',1);
+    for(const [dr,dc] of [[-1,0],[0,-1],[0,1],[-1,-1],[-1,1]])set(lr+dr,lc+dc,'.','#ff9a4a');
+    for(let r=lr+1;r<Math.floor(.90*rows);r++)set(r,lc,'|','#7a4a3a')}
+  const g0=g.map(r=>r.slice()),k0=k.map(r=>r.slice());
+  // The tower: bright orange-red left face, deep red right face
+  const L=['#ff5a30','#ff2a14','#ff1a0a'],Rr=['#ff3a1a','#e8200f','#c8140a'],bm=['#ff4a22','#ff2a14','#ff6a3a'];
+  const wid=v=>v>.72?(v-.72)/.25*.012:0;
+  const beam=(v0,v1)=>paint(.598,v0,.625,v1,(u,v,h,r,c)=>[(r+c)%2?'X':'#',pick(bm,h)]);
+  beam(.17,.21);beam(.32,.37);beam(.50,.56);beam(.73,.80);
+  paint(.565,.13,.675,.17,(u,v,h)=>[pick(['#','H','M'],h),pick(bm,h)]);
+  paint(.555,.15,.6,.97,(u,v,h)=>u<.565-wid(v)||u>.598?null:[pick(['#','H','|','I','M'],h),pick(L,(u-.565)/.033+(h-.5)*.4)]);
+  paint(.6,.15,.69,.97,(u,v,h)=>u<.625||u>.675+wid(v)?null:[pick(['#','H','|','I','M'],h),pick(Rr,(u-.625)/.05+(h-.5)*.4)]);
+  paint(.555,.46,.695,.475,(u,v)=>u<.6||u>.625?[v<.4675?'=':'-',u<.6?'#ff9a70':'#ff4a2a']:null);
+  paint(.555,.68,.695,.693,(u)=>u<.6||u>.625?['=',u<.6?'#ff9a70':'#ff4a2a']:null);
+  line(.58,.2,.58,.95,'#ff9a70');line(.632,.2,.632,.95,'#ff6a3a');line(.668,.2,.668,.95,'#a81408');
+  paint(.565,.125,.675,.135,()=>['=','#ffb08a']);
+  blinkers.push({r:Math.floor(.12*rows),c:Math.floor(.665*cols),ph:3});
+  const blink={r:Math.floor(.125*rows),c:Math.floor(.58*cols)};
+  // Cars on the deck: white one way, red the other
+  const paths=[];
+  for(const [vr,dir] of [[.908,1],[.917,-1]]){const r=Math.floor(vr*rows),cells=[];for(let c=0;c<cols;c++){const u=c/cols;if((u>.553&&u<.60)||(u>.625&&u<.692))continue;cells.push({r,c,gl:'-'})}paths.push({cells,dir,sp:.00007,off:vr})}
+
+  const stars=[];
+  for(let r=0;r<rows*.28;r++)for(let c=0;c<cols;c++)if(hash(c+7,r+3)>.988&&skyPal.includes(k[r][c]))stars.push({r,c,ph:hash(c,r)*6.28});
+  const cv=document.createElement('canvas');cv.width=W*dpr;cv.height=H*dpr;
+  const o=cv.getContext('2d');o.setTransform(dpr,0,0,dpr,0,0);o.font='bold '+(cw*1.6*.82*1.12)+'px ui-monospace,Menlo,Consolas,monospace';o.textBaseline='top';
+  for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){if(g[r][c]===' ')continue;o.fillStyle=k[r][c];o.fillText(g[r][c],c*cw,r*ch)}
+  const lampsF=lamps.filter(l=>g[l.r]&&g[l.r][l.c]===g0[l.r][l.c]&&k[l.r][l.c]===k0[l.r][l.c]);
+  Object.assign(bridge,{key,cv,lamps:lampsF,blink,cables:cab,paths,blinkers,stars});
+}
+function drawBridge(){
+  const key=[cols,rows,W,H,dpr,cw].join();
+  if(bridge.key!==key)buildBridge(key);
+  ctx.drawImage(bridge.cv,0,0,W,H);
+  const f0=ctx.font;ctx.font='bold '+(cw*1.6*.82*1.12)+'px ui-monospace,Menlo,Consolas,monospace';
+  const put=(r,c,gl,col)=>{ctx.fillStyle=col;ctx.fillText(gl,c*cw,r*ch)};
+  for(const l of bridge.lamps){const w=Math.sin(t*.005+l.ph*3);if(w<-.9)continue;
+    if(BLUES.includes(l.col)){w>.7?put(l.r,l.c,'*','#ffffff'):w>.35?put(l.r,l.c,'+','#9ad0ff'):put(l.r,l.c,l.gl,l.col)}
+    else w>.85?put(l.r,l.c,'*','#ffffff'):put(l.r,l.c,l.gl,l.col)}
+  const W_=['#ffffff','#fff2c8','#ffe08a','#e0c070','#b49a58'],R_=['#ffb0a0','#ff3a30','#ff1a1a','#e00a0a','#b00808'];
+  for(const p of bridge.paths){const n=p.cells.length,cs=p.dir>0?W_:R_;
+    for(let j=0;j<4;j++){const q=(((j/4+p.off+t*p.sp*p.dir)%1)+1)%1,head=Math.floor(q*n);
+      for(let m=0;m<8;m++){const cell=p.cells[head-p.dir*m];if(cell)put(cell.r,cell.c,m?'-':'#',cs[Math.min(4,m)])}}}
+  for(const s of bridge.stars){const tw=Math.sin(t*.003+s.ph)>.1;put(s.r,s.c,tw?'*':'.',tw?'#cfe0ff':'#6f86c0')}
+  for(const b of bridge.blinkers)if(Math.sin(t*.003+b.ph)>.4)put(b.r,b.c,'*','#ff2020');
+  const br=Math.floor(.68*rows),bc=Math.floor(((t*.006)%(cols+24))-12),t0=Math.floor(.553*cols),t1=Math.ceil(.693*cols);
+  const pb=(r,c,gl,col)=>{if(c<t0||c>t1)put(r,c,gl,col)};
+  pb(br-1,bc+1,'+','#ffffff');pb(br,bc,'*','#40ff80');pb(br,bc+1,'=','#d8e0f0');pb(br,bc+2,'=','#d8e0f0');pb(br,bc+3,'*','#ff4040');pb(br+1,bc+1,':','#8aa0d8');pb(br+1,bc+2,':','#8aa0d8');
+  const pc=Math.floor(cols-((t*.004)%(cols+30))+10),pr=Math.floor(.1*rows);
+  put(pr,pc,'-','#cfd8ff');put(pr,pc+1,'=','#cfd8ff');put(pr,pc+2,'-','#cfd8ff');if(Math.sin(t*.01)>.3)put(pr,pc+1,'*','#ff3a3a');else put(pr,pc,'*','#ffffff');
+  bridge.cables.forEach((b,i)=>{for(let m=0;m<4;m++){const p=((t*.00015*(1+i*.2)+i*.3-m*.01)%1+1)%1;
+    put(Math.round((b[1]+(b[3]-b[1])*p)*rows),Math.round((b[0]+(b[2]-b[0])*p)*cols),m?'+':'*',m?'#ffa070':'#fff0d0')}});
+  const bk=bridge.blink,pu=(Math.sin(t*.004)+1)/2;
+  if(pu>.3)for(const [dr,dc,gl] of [[-1,0,'|'],[1,0,'|'],[0,-1,'-'],[0,1,'-'],[-1,-1,'\\'],[1,1,'\\'],[-1,1,'/'],[1,-1,'/']])put(bk.r+dr,bk.c+dc,gl,'#ff7aa8');
+  if(pu>.6)for(const [dr,dc] of [[-2,0],[2,0],[0,-3],[0,3]])put(bk.r+dr,bk.c+dc,'*','#ff9ac0');
+  put(bk.r,bk.c,'O','#ff2a2a');
+  ctx.font=f0;
+}
+function frame(dt){
+  t+=dt;
+  ctx.clearRect(0,0,W,H);
+  if(day)drawGarden();else drawBridge();
+}
+let last=performance.now();
+function loop(n){const dt=Math.min(50,n-last);last=n;frame(dt);if(!reduce)requestAnimationFrame(loop)}
+frame(16);if(!reduce)requestAnimationFrame(loop);
+themeToggle.addEventListener('click',()=>{
+  day=!day;
+  body.classList.toggle('day',day);
+  themeToggle.classList.toggle('is-day',day);
+  themeToggle.setAttribute('aria-pressed',String(day));
+  themeToggle.setAttribute('aria-label',day?'Switch to nighttime theme':'Switch to daytime theme');
+  themeToggle.querySelector('.toggle-icon').textContent=day?'☀':'☾';
+  themeToggle.querySelector('.toggle-label').textContent=day?'day':'night';
+  frame(0);
+});
+const roles=['car enthusiast','computer troubleshooter','trail buddy','weekend mechanic','problem solver'];
+const el=document.getElementById('typed');let ri=0,ci=0,del=false;
+function type(){const w=roles[ri];
+  if(!del){ci++;el.textContent=w.slice(0,ci);if(ci===w.length){del=true;return setTimeout(type,1600)}return setTimeout(type,85)}
+  ci--;el.textContent=w.slice(0,ci);if(ci===0){del=false;ri=(ri+1)%roles.length;return setTimeout(type,350)}setTimeout(type,45)}
+if(reduce)el.textContent=roles[0];else type();
+const CC={all:'#ff9a3c',cars:'#ff6b5b',code:'#6cb6ff',outdoors:'#6fd08c'};
+document.querySelectorAll('.proj').forEach(p=>p.style.setProperty('--c',CC[p.dataset.t.split(' ')[0]]));
+document.querySelectorAll('.filters button').forEach(b=>b.style.setProperty('--c',CC[b.dataset.f]));
+/* accordions */
+document.querySelectorAll('.proj>button,.abt>button').forEach(b=>b.addEventListener('click',()=>{
+  const p=b.parentElement,o=p.classList.toggle('open');b.setAttribute('aria-expanded',o)}));
+/* filters */
+document.querySelectorAll('.filters button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.filters button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  const f=b.dataset.f;
+  document.querySelectorAll('.proj').forEach(p=>p.classList.toggle('hide',f!=='all'&&!p.dataset.t.split(' ').includes(f)));
+}));
+/* scroll speeds up the road a bit */
+})();
+</script>
+</body>
+</html>
