@@ -7,7 +7,7 @@
 <title>Daniel Bertocci | Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#000;--fg:#eceef7;--dim:#8791ad;--line:rgba(150,165,220,.16);--lamp:#ff9a3c;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
@@ -57,7 +57,7 @@ body.day .hint{color:#3b5a3a}
 .hero .cta:hover{background:#6ea8fe;color:#1f2a44;transform:translateY(-1px)}
 .hint{position:absolute;right:clamp(20px,5vw,64px);bottom:22px;color:var(--dim);font-size:.85rem;z-index:2;pointer-events:none}
 .wrap{max-width:900px;margin:0 auto;padding:0 clamp(20px,5vw,40px)}
-h2{font-size:1.1rem;font-weight:600;color:var(--dim);margin:0 0 1.2rem}
+h2{font-size:1.1rem;font-weight:800;color:var(--dim);margin:0 0 1.2rem}
 #work{padding:12vh 0 6vh}
 .filters{display:flex;gap:1.2rem;margin-bottom:1.4rem}
 .filters button{background:none;border:0;padding:0 0 3px;font:inherit;color:var(--dim);cursor:pointer;border-bottom:1px solid transparent;transition:color .25s,border-color .25s}
@@ -89,6 +89,18 @@ h2{font-size:1.1rem;font-weight:600;color:var(--dim);margin:0 0 1.2rem}
 .ext a:hover{color:var(--lamp);padding-left:12px}
 footer{padding:6vh 0 10vh;color:var(--dim);font-size:.9rem;display:flex;justify-content:space-between}
 footer a:hover{color:var(--lamp)}
+nav .logo{font-family:'Playfair Display',Georgia,'Times New Roman',serif;font-style:normal;font-weight:600;font-stretch:100%;font-variation-settings:normal;font-size:1.3rem;letter-spacing:.02em;color:#fff}
+nav a:hover{color:#6ea8fe}
+body.day nav a:hover{color:#a8c97f}
+.proj button:hover .nm,.proj button:focus-visible .nm,.abt button:hover,.abt button:focus-visible,.filters button:hover,.ext a:hover,.ext footer a:hover{color:#6ea8fe}
+body.day .proj button:hover .nm,body.day .proj button:focus-visible .nm,body.day .abt button:hover,body.day .abt button:focus-visible,body.day .filters button:hover,body.day .ext a:hover,body.day .ext footer a:hover{color:#a8c97f}
+.proj .nm,.abt button,.ext a b{font-weight:500}
+h2{color:#fff}
+body.day h2{color:var(--fg)}
+.proj .nm,.abt button,.ext a b{color:#a0a7b4}
+body.day .proj .nm,body.day .abt button,body.day .ext a b{color:#6b7280}
+.ext a:hover b{color:#6ea8fe}
+body.day .ext a:hover b{color:#a8c97f}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
 nav{gap:12px;padding-left:max(clamp(20px,5vw,64px),env(safe-area-inset-left,0px));padding-right:max(clamp(20px,5vw,64px),env(safe-area-inset-right,0px))}
 nav .logo{white-space:nowrap}
@@ -100,9 +112,9 @@ footer{align-items:center;gap:1rem;flex-wrap:wrap}
 .ext footer a{display:inline;padding:0;border:0}
 .ext footer a:hover{padding-left:0}
 .ext footer a:last-child{border:0}
-@media(max-width:600px){.proj .ds{display:none}nav{padding-top:14px;padding-bottom:14px}nav .logo{font-size:.95rem}nav div{gap:.9rem;font-size:.9rem}.theme-toggle .toggle-icon{display:none}.hero .txt{top:72px}.hero p{min-height:2.9em}.body{padding:.9rem 1.1rem 1.1rem}}
-@media(max-width:420px){nav{gap:8px}nav .logo{font-size:.86rem}nav div{gap:.7rem;font-size:.8rem}.theme-toggle .toggle-label{display:none}}
-@media(max-width:360px){nav{gap:6px;padding-left:14px;padding-right:14px}nav .logo{font-size:.78rem}nav div{gap:.55rem;font-size:.76rem}}
+@media(max-width:600px){.proj .ds{display:none}nav{padding-top:14px;padding-bottom:14px}nav .logo{font-size:1.1rem}nav div{gap:.9rem;font-size:.9rem}.theme-toggle .toggle-icon{display:none}.hero .txt{top:72px}.hero p{min-height:2.9em}.body{padding:.9rem 1.1rem 1.1rem}}
+@media(max-width:420px){nav{gap:8px}nav .logo{font-size:1rem}nav div{gap:.7rem;font-size:.8rem}.theme-toggle .toggle-label{display:none}}
+@media(max-width:360px){nav{gap:6px;padding-left:14px;padding-right:14px}nav .logo{font-size:.8rem}nav div{gap:.45rem;font-size:.72rem}}
 @media(max-height:480px) and (orientation:landscape){.hero .txt{top:64px}.hero .box{width:min(340px,50vw)}}
 @media(prefers-reduced-motion:reduce){.caret{animation:none}*{transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
@@ -142,12 +154,13 @@ footer{align-items:center;gap:1rem;flex-wrap:wrap}
 </div></section>
 
 <section id="about"><div class="wrap">
+  <h2>About</h2>
   <div class="abt"><button aria-expanded="false"><span class="pl">+</span>About me</button>
   <div class="more"><div><p>I'm Daniel Bertocci. I enjoy cars, computers, technology, and spending time outdoors. I like learning by building, troubleshooting, and figuring out how things fit together.</p></div></div></div>
 </div></section>
 
 <section class="ext" id="contact"><div class="wrap">
-  <h2>Elsewhere</h2>
+  <h2>Contact</h2>
   <a href="resume.pdf"><b>Resume</b><span>one-page PDF</span></a>
   <a href="https://github.com/YOUR-GITHUB-USERNAME" target="_blank" rel="noopener"><b>GitHub</b><span>projects &amp; code</span></a>
   <a href="https://www.instagram.com/YOUR-INSTAGRAM-USERNAME" target="_blank" rel="noopener"><b>Instagram</b><span>photos &amp; outdoors</span></a>
@@ -549,6 +562,7 @@ document.querySelectorAll('.filters button').forEach(b=>b.addEventListener('clic
 }));
 /* scroll speeds up the road a bit */
 })();
+document.querySelectorAll('a[href="#top"]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();window.scrollTo({top:0,behavior:'smooth'})}));
 </script>
 </body>
 </html>
