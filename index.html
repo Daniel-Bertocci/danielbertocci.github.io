@@ -59,7 +59,7 @@ body.day .hint{color:#3b5a3a}
 .hint{position:absolute;right:clamp(20px,5vw,64px);bottom:22px;color:var(--dim);font-size:.85rem;z-index:2;pointer-events:none}
 .wrap{max-width:900px;margin:0 auto;padding:0 clamp(20px,5vw,40px)}
 h2{font-size:1.1rem;font-weight:800;color:var(--dim);margin:0 0 1.2rem}
-#work{padding:12vh 0 6vh}
+#projects{padding:12vh 0 6vh}
 .proj{border-top:1px solid var(--line);transition:opacity .4s}
 .proj:last-child{border-bottom:1px solid var(--line)}
 .proj.hide{display:none}
@@ -114,11 +114,11 @@ footer{align-items:center;gap:1rem;flex-wrap:wrap}
 @media(max-width:360px){nav{gap:6px;padding-left:14px;padding-right:14px}nav .logo{font-size:.8rem}nav div{gap:.45rem;font-size:.72rem}}
 @media(max-height:480px) and (orientation:landscape){.hero .txt{top:64px}.hero .box{width:min(340px,50vw)}}
 @media(prefers-reduced-motion:reduce){.caret{animation:none}*{transition-duration:.01ms!important;scroll-behavior:auto!important}}
-#work,#about,.ext{--tx:#9b968a;--dm:#d9d6cd;font-family:ui-monospace,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace}
-body.day #work,body.day #about,body.day .ext{--tx:#5b6b75;--dm:#1d2a33}
+#projects,#about,.ext{--tx:#9b968a;--dm:#d9d6cd;font-family:ui-monospace,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace}
+body.day #projects,body.day #about,body.day .ext{--tx:#5b6b75;--dm:#1d2a33}
 h2,body.day h2{font-size:1rem;font-weight:700;text-decoration:none;color:var(--dm);margin:0 0 1.2rem}
 #about{padding:12vh 0 0}
-#work{padding:7vh 0 4vh}
+#projects{padding:7vh 0 4vh}
 .abt{border:0}
 .abt button,body.day .abt button{font-size:1.05rem;font-weight:400;font-stretch:100%;gap:.5rem;color:var(--tx);padding:.4rem 0}
 .abt .sub{color:var(--dm)}
@@ -154,15 +154,15 @@ body.day .abt button span:first-child,body.day .ext footer .me{color:#14212b}
 .abt .sub,.abt .pl{color:var(--dm)}
 </style>
 </head>
-<body>
-<nav id="top"><a class="logo" href="#top">Daniel Bertocci</a>
-<div><a href="#work">projects</a><a href="#about">about</a><a href="#contact">contact</a><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light theme" aria-pressed="false"><span class="toggle-icon" aria-hidden="true">☾</span><span class="toggle-track" aria-hidden="true"><span class="toggle-thumb"></span></span></button></div></nav>
+<body id="portfolio">
+<nav><a class="logo" href="#portfolio">Daniel Bertocci</a>
+<div><a href="#projects">projects</a><a href="#about">about</a><a href="#contact">contact</a><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light theme" aria-pressed="false"><span class="toggle-icon" aria-hidden="true">☾</span><span class="toggle-track" aria-hidden="true"><span class="toggle-thumb"></span></span></button></div></nav>
 
 <header class="hero" id="hero">
   <canvas id="c" aria-label="Animated ASCII scene: a Golden Gate-style bridge at night, a garden by day"></canvas>
   <div class="txt">
     <div class="box">
-    <div class="bar"><div class="dots" aria-hidden="true"><i></i><i></i><i></i></div><a class="cta" href="#work">View projects ↓</a></div>
+    <div class="bar"><div class="dots" aria-hidden="true"><i></i><i></i><i></i></div><a class="cta" href="#projects">View projects ↓</a></div>
     <div class="body">
     <div class="hi">Hello, I'm</div>
     <h1>Daniel Bertocci</h1>
@@ -185,7 +185,7 @@ body.day .abt button span:first-child,body.day .ext footer .me{color:#14212b}
   </div>
 </div></section>
 
-<section id="work"><div class="wrap">
+<section id="projects"><div class="wrap">
   <h2>Projects</h2>
   <div id="list">
     <div class="proj" data-t="cars code"><button aria-expanded="false"><span class="pl">+</span><span class="nm">Garage Log</span><span class="ds">car maintenance tracker</span></button><div class="more"><div><p>A simple place to track maintenance, repairs, upgrades, and the next project waiting in the garage.</p></div></div></div>
@@ -203,7 +203,7 @@ body.day .abt button span:first-child,body.day .ext footer .me{color:#14212b}
   <a href="https://docs.google.com/document/d/1e5z-tlHmPu48xKF85BapcMCbNIKmxoXU/edit?usp=sharing&amp;ouid=114378955264603031018&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener"><b>Resume</b><span>one-page PDF</span></a>
   <a href="https://github.com/YOUR-GITHUB-USERNAME" target="_blank" rel="noopener"><b>GitHub</b><span>projects &amp; code</span></a>
   <a href="https://mail.google.com/mail/?view=cm&amp;to=bertoccidaniel.db@gmail.com" target="_blank" rel="noopener"><b>Email</b><span>bertoccidaniel.db@gmail.com</span></a>
-  <footer><span>© 2026 <b class="me">Daniel Bertocci</b> · California</span><a href="#top">back to top ↑</a></footer>
+  <footer><span>© 2026 <b class="me">Daniel Bertocci</b> · California</span><a href="#portfolio">back to top ↑</a></footer>
 </div></section>
 
 <script>
@@ -533,13 +533,6 @@ function drawBridge(){
   const br=Math.floor(.68*bridge.vr)+bridge.roff,bc=Math.floor(((t*.006)%(cols+24))-12),t0=Math.floor(.553*cols),t1=Math.ceil(.693*cols);
   const pb=(r,c,gl,col)=>{if(c<t0||c>t1)put(r,c,gl,col)};
   pb(br-1,bc+1,'+','#ffffff');pb(br,bc,'*','#40ff80');pb(br,bc+1,'=','#d8e0f0');pb(br,bc+2,'=','#d8e0f0');pb(br,bc+3,'*','#ff4040');pb(br+1,bc+1,':','#8aa0d8');pb(br+1,bc+2,':','#8aa0d8');
-  for(let m=1;m<=16;m++){const w=Math.sin(t*.012+m*1.7),near=m<5,mid=m<10;
-    const gl=near?(w>0?'*':'o'):mid?(w>0?'~':'-'):(w>0?'.':',');
-    const col=near?'#ffffff':mid?'#cfe6ff':'#8fb4e8';
-    pb(br+1,bc-m,gl,col);
-    if(m>1&&m<14)pb(br+2,bc-m-(m>>1),w>0?'~':'-',mid?'#bcd8ff':'#6f94d8');
-    if(m<7&&w>.2)pb(br-1,bc+1-m,m<3?"'":'.','#ffffff');
-    if(m<4&&w<-.2)pb(br-2,bc+1-m,'.','#e8f2ff')}
   const pc=Math.floor(cols-((t*.004)%(cols+30))+10),pr=Math.floor(.1*bridge.vr)+bridge.roff;
   const putP=(r,c,gl,col)=>{ctx.fillStyle='#12308a';ctx.fillRect(c*cw,r*ch,cw,ch);put(r,c,gl,col)};
   putP(pr,pc,'-','#cfd8ff');putP(pr,pc+1,'=','#cfd8ff');putP(pr,pc+2,'-','#cfd8ff');if(Math.sin(t*.01)>.3)putP(pr,pc+1,'*','#ff3a3a');else putP(pr,pc,'*','#ffffff');
@@ -586,7 +579,8 @@ addEventListener('keydown',e=>{if(e.key==='Escape'&&am.classList.contains('show'
 document.querySelectorAll('.proj>button').forEach(b=>b.addEventListener('click',()=>{
   const p=b.parentElement,o=p.classList.toggle('open');b.setAttribute('aria-expanded',o)}));
 })();
-document.querySelectorAll('a[href="#top"]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();window.scrollTo({top:0,behavior:'smooth'})}));
+document.querySelectorAll('a[href="#portfolio"]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();window.scrollTo({top:0,behavior:'smooth'});try{history.replaceState(null,'','#portfolio')}catch(_){}}));
+if(!location.hash){try{history.replaceState(null,'','#portfolio')}catch(_){}}
 </script>
 </body>
 </html>
