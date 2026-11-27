@@ -153,6 +153,14 @@ h2,body.day h2{font-weight:700}
 .abt button span:first-child,.ext footer .me{color:#fff;font-weight:400}
 body.day .abt button span:first-child,body.day .ext footer .me{color:#14212b}
 .abt .sub,.abt .pl{color:var(--dm)}
+nav{transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+nav.hide{transform:translateY(-110%)}
+#c,.hero .txt{will-change:transform}
+html.js .rv{opacity:0;transform:translateY(34px);transition:opacity .9s cubic-bezier(.2,.8,.2,1) var(--d,0s),transform .9s cubic-bezier(.2,.8,.2,1) var(--d,0s)}
+html.js .rv.in{opacity:1;transform:none}
+html.js .ext a.rv{transition:opacity .9s cubic-bezier(.2,.8,.2,1) var(--d,0s),transform .9s cubic-bezier(.2,.8,.2,1) var(--d,0s),padding .3s,color .3s}
+.proj{position:relative}
+@media(prefers-reduced-motion:reduce){html.js .rv{opacity:1;transform:none}nav.hide{transform:none}}
 </style>
 </head>
 <body id="portfolio">
@@ -370,21 +378,60 @@ function buildGarden(key){
   const cv=document.createElement('canvas');cv.width=W*dpr;cv.height=H*dpr;
   const o=cv.getContext('2d');o.setTransform(dpr,0,0,dpr,0,0);o.font='bold '+(cw*1.6*.82*1.12)+'px ui-monospace,Menlo,Consolas,monospace';o.textBaseline='top';
   for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){if(g[r][c]===' ')continue;o.fillStyle=k[r][c];o.fillText(g[r][c],c*cw,r*ch)}
-  garden.key=key;garden.cv=cv;garden.anim=anim;
+  garden.key=key;garden.cv=cv;garden.anim=anim;garden.g=g;garden.k=k;
 }
+const gcache={};
+const isGreen=col=>{let v=gcache[col];if(v===undefined){const n=parseInt(col.slice(1),16),R=n>>16,G=n>>8&255,B=n&255;v=gcache[col]=G-R>=20&&G-B>=30}return v};
 function drawGarden(){
   const key=[cols,rows,W,H,dpr,cw].join();
   if(garden.key!==key)buildGarden(key);
-  ctx.drawImage(garden.cv,0,0,W,H);
+  const mo=garden.mo,amp=mo?Math.max(0,1-(t-mo.t)/1400):0,RAD=150,hole=[];
+  if(amp>0){const cc=Math.floor(mo.x/cw),cr=Math.floor(mo.y/ch),rc=Math.ceil(RAD/cw),rr=Math.ceil(RAD/ch);
+    for(let r=cr-rr;r<=cr+rr;r++)for(let c=cc-rc;c<=cc+rc;c++){if(r<0||c<0||r>=rows||c>=cols)continue;
+      const d=Math.hypot((c+.5)*cw-mo.x,(r+.5)*ch-mo.y)/RAD;if(d<1)hole.push([r,c,d])}}
+  if(hole.length){ctx.save();ctx.beginPath();ctx.rect(0,0,W,H);for(const [r,c] of hole)ctx.rect(c*cw,r*ch,cw,ch);ctx.clip('evenodd');ctx.drawImage(garden.cv,0,0,W,H);ctx.restore()}
+  else ctx.drawImage(garden.cv,0,0,W,H);
   const f0=ctx.font;ctx.font='bold '+(cw*1.6*.82*1.12)+'px ui-monospace,Menlo,Consolas,monospace';
+  const sway=(r,c,gl,col)=>{if(!(r<rows*.8&&isGreen(col))){ctx.fillStyle=col;ctx.fillText(gl,c*cw,r*ch);return}
+    const d=Math.hypot((c+.5)*cw-mo.x,(r+.5)*ch-mo.y)/RAD;
+    if(d>=1){ctx.fillStyle=col;ctx.fillText(gl,c*cw,r*ch);return}
+    const s=(1-d)*(1-d)*amp,ph=t*.009+c*.45+r*.25;
+    ctx.save();ctx.translate(c*cw+cw/2+Math.sin(ph)*s*cw*1.1+((c+.5)*cw-mo.x)/RAD*s*cw*.5,r*ch+ch/2+Math.sin(ph*1.3)*s*ch*.2);
+    ctx.rotate(Math.sin(ph)*s*.45);ctx.fillStyle=col;ctx.fillText(gl,-cw/2,-ch/2);ctx.restore()};
+  for(const [r,c] of hole){const gl=garden.g[r][c];if(gl!==' ')sway(r,c,gl,garden.k[r][c])}
   for(const a of garden.anim){
     let gl=a.gl,col=a.col;
     if(a.t==='grass'){const s=wind(a.c,a.ph);gl=s>.2?'\\':s<-.2?'/':'|'}
     else if(Math.sin(t*.0035+a.ph*3+a.c*.3)>.8){gl=a.alt;col=a.hi}
-    ctx.fillStyle=col;ctx.fillText(gl,a.c*cw,a.r*ch);
+    if(amp>0)sway(a.r,a.c,gl,col);else{ctx.fillStyle=col;ctx.fillText(gl,a.c*cw,a.r*ch)}
   }
   ctx.font=f0;
 }
+const FWC=[['#ff1f1f','#ff5a2a'],['#ff8c00','#ffc000'],['#ffe100','#ffb800'],['#19e650','#8aff1f'],['#1f7bff','#00d0ff'],['#ff1fd0','#b01fff']];
+const fw={rockets:[],parts:[]};let nextFW=1500;
+let fwZones=[];
+function launchFW(){
+  if(!fwZones.length){fwZones=[0,1,2,3,4];for(let i=4;i>0;i--){const j=Math.floor(Math.random()*(i+1));[fwZones[i],fwZones[j]]=[fwZones[j],fwZones[i]]}}
+  const z=fwZones.pop(),m=W<=600,x=cols*(z+.15+Math.random()*.7)/5;
+  let ty=rows*(m?.5+Math.random()*.15:.1+Math.random()*.3);
+  if(!m){const bx=document.querySelector('.hero .box'),br=bx?bx.getBoundingClientRect():null;
+    if(br&&x*cw<br.right+40)ty=Math.max(ty,(br.bottom+50)/ch)}
+  fw.rockets.push({x,y:rows-3,ty,v:(rows-3-ty)/(900+Math.random()*300),at:t,pals:FWC.slice().sort(()=>Math.random()-.5).slice(0,3)})}
+function drawFW(dt){
+  if(!fw.rockets.length&&!fw.parts.length)return;
+  const f0=ctx.font;ctx.font='bold '+(cw*1.6*.82*1.12)+'px ui-monospace,Menlo,Consolas,monospace';
+  const put=(x,y,gl,col,a)=>{ctx.globalAlpha=a;ctx.fillStyle=col;ctx.fillText(gl,Math.round(x)*cw,Math.round(y)*ch)};
+  for(let i=fw.rockets.length-1;i>=0;i--){const r=fw.rockets[i];
+    r.y-=r.v*dt;
+    if(r.y<=r.ty){const n=64,sp0=.007+Math.random()*.003;
+      for(let k=0;k<n;k++){const a=k/n*Math.PI*2+Math.random()*.1,sp=sp0*(.55+Math.random()*.45);fw.parts.push({x:r.x,y:r.y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp*cw/ch,life:0,max:1300+Math.random()*800,pal:r.pals[k%r.pals.length]})}
+      fw.rockets.splice(i,1);continue}
+    put(r.x,r.y,'|','#ffb000',1);put(r.x,r.y+1,'.','#ff8a00',.7);put(r.x,r.y+2,'.','#ff5a00',.4)}
+  for(let i=fw.parts.length-1;i>=0;i--){const p=fw.parts[i];p.life+=dt;if(p.life>p.max){fw.parts.splice(i,1);continue}
+    p.vy+=.0000055*dt;p.vx*=.9985;p.x+=p.vx*dt;p.y+=p.vy*dt;
+    const f=p.life/p.max;put(p.x,p.y,f<.35?'*':f<.7?'+':'.',f<.5?p.pal[1]:p.pal[0],1-f*f)}
+  ctx.globalAlpha=1;ctx.font=f0}
+hero.addEventListener('pointermove',e=>{if(!day)return;const r=cv.getBoundingClientRect();garden.mo={x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height,t}});
 // ---- Night: Golden Gate tower, city across the bay, bridge deck; colored text only ----
 const BLUES=['#bfe0ff','#7ab8ff','#4aa0ff'];
 const bridge={key:'',cv:null,glow:[],lamps:[],blink:null,cables:[],paths:[],blinkers:[],stars:[]};
@@ -409,10 +456,11 @@ function buildBridgeScene(key,rows,ROFF){
   const skyPal=['#0c2a86','#123396','#1a3fa8','#2a4cb4'];
   paint(0,0,1,.6,(u,v,h)=>h>.92?null:[pick([':','.',';',','],(h*9)%1),pick(skyPal,clamp(v/.5,0,.999)+(h-.5)*.25)]);
   // Moon: cratered disc, plus a wide glow that is animated in drawBridge
-  const glow=[];
+  const glow=[];let moonC=0;
   {const R=3.3,mcy=.10*rows;let mcx;
    if(W<=600)mcx=R*ch/cw+2;
    else{const bx=document.querySelector('.hero .box'),bR=bx?bx.getBoundingClientRect().right:454;mcx=Math.min((bR+R*ch+12)/cw,.47*cols)}
+   moonC=mcx;
    for(let r=Math.max(0,Math.floor(mcy-11));r<=Math.min(rows-1,Math.ceil(mcy+11));r++)for(let c=Math.max(0,Math.floor(mcx-20));c<=Math.min(cols-1,Math.ceil(mcx+20));c++){
      const h=hash(c,r),d=Math.hypot((c+.5-mcx)*cw,(r+.5-mcy)*ch)/(R*ch);
      if(d>3)continue;
@@ -449,13 +497,11 @@ function buildBridgeScene(key,rows,ROFF){
   for(const [a,b,top] of bl)if(top<.38)blinkers.push({r:Math.floor(top*rows)-1,c:Math.floor((a+b)/2*cols),ph:a*20});
   // Glass skyscraper and pyramid-spire tower
   paint(.82,.18,.92,.36,(u,v,h)=>Math.abs(u-.87)<.035*(1-(.36-v)/.18*.45)?[pick(['#','M','H'],h),pick(['#bfe3ff','#8ac4ff','#5aa0f0'],(h*5)%1)]:null);
-  line(.87,.2,.87,.34,'#ffffff');blinkers.push({r:Math.floor(.175*rows),c:Math.floor(.87*cols),ph:2});
-  paint(.60,.24,.625,.34,(u,v,h)=>Math.abs(u-.611)<(v-.24)/.1*.009+.0015?['#',pick(['#e8f0ff','#c8d8ff'],h)]:null);
+  blinkers.push({r:Math.floor(.18*rows)-1,c:Math.round(.87*cols),ph:2});
   // Dark shoreline trees, white ferry building, shore lights
-  paint(0,.52,.4,.57,(u,v,h)=>h<.85?[pick(['^','%','&','#'],(h*3)%1),pick(['#10241a','#163020','#0c1a14'],(h*9)%1)]:null);
+  paint(0,.52,.4,.57,(u,v,h)=>h<.85?[pick(['^','%','&','#'],(h*3)%1),pick(['#3a4cb0','#4a60c8','#2f3f9a','#5a70d8'],(h*9)%1)]:null);
   paint(0,.55,.38,.585,(u,v,h)=>h<.92?['=',v<.565?'#c8d8f0':'#8aa0c8']:null);
   for(let c=Math.floor(.02*cols);c<Math.floor(.36*cols);c++)if(hash(c,4)<.25)lamp(Math.floor(.562*rows),c,'.','#ffe8b0');
-  for(let r=Math.floor(.6*rows);r<Math.floor(.8*rows);r++)for(let c=Math.floor(.38*cols);c<cols;c++){const v=r/rows;if(hash(c*7,r*3)<.09*(1-(v-.6)/.2))lamp(r,c,pick(['|',':','!'],hash(c,r)),pick(['#c8782a','#a85a30','#8a5090','#ffb070'],hash(r,c*2)))}
   for(let c=Math.floor(.4*cols);c<cols;c++)if(hash(c,1)<.6)lamp(Math.floor(.565*rows),c,'o',pick(['#ff8a2a','#ffb347'],hash(c,2)));
   // Dark hillside in the bottom-left corner
   paint(0,.79,.5,1,(u,v,h)=>v<.8+.2*(u/.5)?null:(v<.815+.2*(u/.5))?['/',pick(['#4a4a7a','#3a3a6a'],h)]:[pick(['%','#','&','8'],h),pick(['#1a1a2a','#0e0e18','#222035'],(h*7)%1)]);
@@ -489,7 +535,7 @@ function buildBridgeScene(key,rows,ROFF){
   const blink={r:Math.floor(.125*rows),c:Math.floor(.58*cols)};
   // Cars on the deck: white one way, red the other
   const paths=[];
-  for(const [vr,dir] of [[.908,1],[.917,-1]]){const r=Math.floor(vr*rows),cells=[];for(let c=0;c<cols;c++){const u=c/cols;if((u>.553&&u<.60)||(u>.625&&u<.692))continue;cells.push({r,c,gl:'-'})}paths.push({cells,dir,sp:.00007,off:vr})}
+  for(const [vr,dir] of [[.922,1],[.945,-1]]){const r=Math.floor(vr*rows),cells=[];for(let c=0;c<cols;c++){const u=c/cols;if((u>.553&&u<.60)||(u>.625&&u<.692))continue;cells.push({r,c,gl:'-'})}paths.push({cells,dir,sp:.00007,off:vr})}
 
   const stars=[];
   for(let r=0;r<rows*.42;r++)for(let c=0;c<cols;c++)if(hash(c+7,r+3)>.955&&skyPal.includes(k[r][c]))stars.push({r,c,ph:hash(c,r)*6.28});
@@ -498,9 +544,13 @@ function buildBridgeScene(key,rows,ROFF){
   for(let r=0;r<ROFF;r++)for(let c=0;c<cols;c++){const hh=hash(c,r+99);if(hh>.9)continue;o.fillStyle=pick(['#0b2a78','#123496'],(hh*9)%1);o.fillText(pick([':','.',';',','],(hh*7)%1),c*cw,r*ch)}
   for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){if(g[r][c]===' ')continue;o.fillStyle=k[r][c];o.fillText(g[r][c],c*cw,(r+ROFF)*ch)}
   const lampsF=lamps.filter(l=>g[l.r]&&g[l.r][l.c]===g0[l.r][l.c]&&k[l.r][l.c]===k0[l.r][l.c]);
+  const wl=Math.floor(.585*rows),refl=[],spark=[];
+  for(const l of lampsF){if(l.r>=wl||l.r<.3*rows||hash(l.c*3,l.r*5)>.3)continue;
+    const rr=wl+1+Math.round((wl-l.r)*.5);if(rr<rows*.9)refl.push({c:l.c,r:rr,col:l.col,ph:l.ph,a:1})}
+  for(let r=Math.floor(.6*rows);r<Math.floor(.88*rows);r++)for(let c=0;c<cols;c++)if(hash(c+13,r+5)>.955&&(g[r][c]==='~'||g[r][c]==='-'))spark.push({r,c,ph:hash(c,r)*6.28});
   const sh=a=>a.map(x=>({...x,r:x.r+ROFF}));
   const glowF=glow.filter(x=>k[x.r][x.c]===''||skyPal.includes(k[x.r][x.c]));
-  Object.assign(bridge,{key,cv,glow:sh(glowF),lamps:sh(lampsF),blink:{...blink,r:blink.r+ROFF},cables:cab,paths:paths.map(p=>({...p,cells:sh(p.cells)})),blinkers:sh(blinkers),stars:sh(stars),vr:rows,roff:ROFF});
+  Object.assign(bridge,{key,cv,glow:sh(glowF),lamps:sh(lampsF),blink:{...blink,r:blink.r+ROFF},cables:cab,paths:paths.map(p=>({...p,cells:sh(p.cells)})),blinkers:sh(blinkers),stars:sh(stars),refl:sh(refl),spark:sh(spark),moonC,vr:rows,roff:ROFF});
 }
 // On phones the white box covers the top of the scene, so the whole bridge is drawn lower, below the box
 function buildBridge(key){
@@ -516,9 +566,18 @@ function drawBridge(){
   ctx.drawImage(bridge.cv,0,0,W,H);
   const f0=ctx.font;ctx.font='bold '+(cw*1.6*.82*1.12)+'px ui-monospace,Menlo,Consolas,monospace';
   const put=(r,c,gl,col)=>{ctx.fillStyle=col;ctx.fillText(gl,c*cw,r*ch)};
-  for(const l of bridge.lamps){const w=Math.sin(t*.005+l.ph*3);if(w<-.9)continue;
+  for(const l of bridge.lamps){const w=Math.sin(t*.005+l.ph*3);if(w<-.9){ctx.globalAlpha=.5;put(l.r,l.c,l.gl,l.col);ctx.globalAlpha=1;continue}
     if(BLUES.includes(l.col)){w>.7?put(l.r,l.c,'*','#ffffff'):w>.35?put(l.r,l.c,'+','#9ad0ff'):put(l.r,l.c,l.gl,l.col)}
     else w>.85?put(l.r,l.c,'*','#ffffff'):put(l.r,l.c,l.gl,l.col)}
+  ctx.globalAlpha=1;
+  {const wl=Math.floor(.6*bridge.vr)+bridge.roff,we=Math.floor(.78*bridge.vr)+bridge.roff;
+   if(bridge.moonC>0)for(let r=wl;r<we;r++){const f=1-(r-wl)/(we-wl),sp=1+(r-wl)*.12;
+     for(let j=-1;j<=1;j++){const x=Math.round(bridge.moonC+j*sp+Math.sin(t*.003+r*.8)*sp*.8);
+       ctx.globalAlpha=(.2+.5*f)*(j?.6:1)*(.6+.4*Math.sin(t*.005+r*1.3+j));put(r,x,j?'-':'=','#f4e090')}}
+   for(const q of bridge.refl){const x=q.c+Math.round(Math.sin(t*.0028+q.r*.9+q.ph)*1.4),w=.5+.5*Math.sin(t*.004+q.ph*2+q.r*.5);
+     ctx.globalAlpha=.25+.5*w;put(q.r,x,w>.6?':':'.',q.col);ctx.globalAlpha=(.25+.5*w)*.5;put(q.r+1,x,'.',q.col)}
+   for(const s of bridge.spark){const w=Math.sin(t*.004+s.ph*3);if(w>.6){ctx.globalAlpha=(w-.6)*2.2;put(s.r,s.c,'~','#cfe6ff')}}
+   ctx.globalAlpha=1}
   const W_=['#ffffff','#fff2c8','#ffe08a','#e0c070','#b49a58'],R_=['#ffb0a0','#ff3a30','#ff1a1a','#e00a0a','#b00808'];
   for(const p of bridge.paths){const n=p.cells.length,cs=p.dir>0?W_:R_;
     for(let j=0;j<4;j++){const q=(((j/4+p.off+t*p.sp*p.dir)%1)+1)%1,head=Math.floor(q*n);
@@ -547,7 +606,7 @@ function drawBridge(){
 function frame(dt){
   t+=dt;
   ctx.clearRect(0,0,W,H);
-  if(day)drawGarden();else drawBridge();
+  if(day)drawGarden();else{if(!reduce&&t>=nextFW){launchFW();nextFW=t+4000}drawBridge();drawFW(dt)}
 }
 let last=performance.now();
 function loop(n){const dt=Math.min(50,n-last);last=n;frame(dt);if(!reduce)requestAnimationFrame(loop)}
@@ -559,6 +618,7 @@ themeToggle.addEventListener('click',()=>{
   themeToggle.setAttribute('aria-pressed',String(day));
   themeToggle.setAttribute('aria-label',day?'Switch to dark theme':'Switch to light theme');
   themeToggle.querySelector('.toggle-icon').textContent=day?'☀':'☾';
+  fw.rockets.length=0;fw.parts.length=0;if(!day)nextFW=t+1500;
   frame(0);
 });
 const roles=['car enthusiast','computer troubleshooter','trail buddy','weekend mechanic','problem solver'];
@@ -581,6 +641,27 @@ document.querySelectorAll('.proj>button').forEach(b=>b.addEventListener('click',
 })();
 document.querySelectorAll('a[href="#portfolio"]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();window.scrollTo({top:0,behavior:'smooth'});try{history.replaceState(null,'','#portfolio')}catch(_){}}));
 if(!location.hash){try{history.replaceState(null,'','#portfolio')}catch(_){}}
+</script>
+<script>
+(function(){
+const R=matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.documentElement.classList.add('js');
+const rv=[...document.querySelectorAll('h2,.abt,.proj,.ext a,footer')];
+rv.forEach(e=>e.classList.add('rv'));
+document.querySelectorAll('#list,.ext .wrap').forEach(g=>[...g.querySelectorAll('.rv')].forEach((e,i)=>e.style.setProperty('--d',((i%4)*.08)+'s')));
+if(R||!('IntersectionObserver' in window))rv.forEach(e=>e.classList.add('in'));
+else{const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}}),{threshold:.15,rootMargin:'0px 0px -6% 0px'});rv.forEach(e=>io.observe(e))}
+const heroEl=document.getElementById('hero'),cvs=document.getElementById('c'),txt=heroEl.querySelector('.txt'),nav=document.querySelector('nav');
+let ly=0,tick=false;
+function upd(){tick=false;const y=scrollY,max=document.documentElement.scrollHeight-innerHeight;
+  if(!R){const hh=heroEl.offsetHeight,p=Math.min(1,y/hh);
+    if(y<hh*1.2){cvs.style.transform='translate3d(0,'+(y*.35)+'px,0) scale('+(1+p*.08)+')';
+      txt.style.transform='translate3d(0,'+(y*.18)+'px,0) scale('+(1-p*.06)+')';txt.style.opacity=Math.max(0,1-p*1.3)}
+    const d=y-ly;if(Math.abs(d)>4){nav.classList.toggle('hide',d>0&&y>140);ly=y}
+    if(y<80)nav.classList.remove('hide')}}
+addEventListener('scroll',()=>{if(!tick){tick=true;requestAnimationFrame(upd)}},{passive:true});
+addEventListener('resize',upd);upd();
+})();
 </script>
 </body>
 </html>
