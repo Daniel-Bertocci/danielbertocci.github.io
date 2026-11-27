@@ -161,6 +161,7 @@ html.js .rv.in{opacity:1;transform:none}
 html.js .ext a.rv{transition:opacity .9s cubic-bezier(.2,.8,.2,1) var(--d,0s),transform .9s cubic-bezier(.2,.8,.2,1) var(--d,0s),padding .3s,color .3s}
 .proj{position:relative}
 @media(prefers-reduced-motion:reduce){html.js .rv{opacity:1;transform:none}nav.hide{transform:none}}
+.hero p{min-height:2.9em}
 </style>
 </head>
 <body id="portfolio">
@@ -175,7 +176,7 @@ html.js .ext a.rv{transition:opacity .9s cubic-bezier(.2,.8,.2,1) var(--d,0s),tr
     <div class="body">
     <div class="hi">Hello, I'm</div>
     <h1>Daniel Bertocci</h1>
-    <p aria-label="I can be your car enthusiast, computer troubleshooter, trail buddy, weekend mechanic, or problem solver.">I can be your <span class="typed" id="typed"></span><span class="caret" aria-hidden="true"></span></p>
+    <p aria-label="I can be your program manager, product quality engineer, forward deployed engineer, business analyst, or logistics and supply chain manager.">I can be your <span class="typed" id="typed"></span><span class="caret" aria-hidden="true"></span></p>
     </div>
     </div>
   </div>
@@ -209,7 +210,6 @@ html.js .ext a.rv{transition:opacity .9s cubic-bezier(.2,.8,.2,1) var(--d,0s),tr
 <section class="ext" id="contact"><div class="wrap">
   <h2>Contact</h2>
   <a href="https://docs.google.com/document/d/1e5z-tlHmPu48xKF85BapcMCbNIKmxoXU/edit?usp=sharing&amp;ouid=114378955264603031018&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener"><b>Resume</b><span>one-page PDF</span></a>
-  <a href="https://github.com/YOUR-GITHUB-USERNAME" target="_blank" rel="noopener"><b>GitHub</b><span>projects &amp; code</span></a>
   <a href="https://mail.google.com/mail/?view=cm&amp;to=bertoccidaniel.db@gmail.com" target="_blank" rel="noopener"><b>Email</b><span>bertoccidaniel.db@gmail.com</span></a>
   <footer><span>© 2026 <b class="me">Daniel Bertocci</b> · California</span><a href="#portfolio">back to top ↑</a></footer>
 </div></section>
@@ -516,7 +516,7 @@ function buildBridgeScene(key,rows,ROFF){
   paint(0,.90,1,.92,(u,v,h)=>['=',pick(['#ffd0a0','#ffe8c8','#ffb070'],(h*5)%1)]);
   paint(0,.92,1,.97,(u,v,h,r,c)=>[(r+c)%2?'X':'/',pick(['#d9602a','#ff7a3a','#a8461a'],(h*3)%1)]);
   for(const u of [.03,.09,.15,.21,.27,.33,.39,.45,.51,.6,.66,.72,.78,.84,.90,.96]){const lr=Math.floor(.89*rows),lc=Math.floor(u*cols);lamp(lr,lc,'o','#ffa040',1);
-    for(const [dr,dc] of [[-1,0],[0,-1],[0,1],[-1,-1],[-1,1]])set(lr+dr,lc+dc,'.','#ff9a4a');
+    for(const [dr,dc] of [[-1,0],[0,-1],[0,1],[-1,-1],[-1,1]])if(k[lr+dr]&&k[lr+dr][lc+dc]!=='#e8301c')set(lr+dr,lc+dc,'.','#ff9a4a');
     for(let r=lr+1;r<Math.floor(.90*rows);r++)set(r,lc,'|','#7a4a3a')}
   const g0=g.map(r=>r.slice()),k0=k.map(r=>r.slice());
   // The tower: bright orange-red left face, deep red right face
@@ -543,7 +543,7 @@ function buildBridgeScene(key,rows,ROFF){
   const o=cv.getContext('2d');o.setTransform(dpr,0,0,dpr,0,0);o.font='bold '+(cw*1.6*.82*1.12)+'px ui-monospace,Menlo,Consolas,monospace';o.textBaseline='top';
   for(let r=0;r<ROFF;r++)for(let c=0;c<cols;c++){const hh=hash(c,r+99);if(hh>.9)continue;o.fillStyle=pick(['#0b2a78','#123496'],(hh*9)%1);o.fillText(pick([':','.',';',','],(hh*7)%1),c*cw,r*ch)}
   for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){if(g[r][c]===' ')continue;o.fillStyle=k[r][c];o.fillText(g[r][c],c*cw,(r+ROFF)*ch)}
-  const lampsF=lamps.filter(l=>g[l.r]&&g[l.r][l.c]===g0[l.r][l.c]&&k[l.r][l.c]===k0[l.r][l.c]);
+  const lampsF=lamps.filter(l=>g[l.r]&&g[l.r][l.c]===g0[l.r][l.c]&&k[l.r][l.c]===k0[l.r][l.c]&&k[l.r][l.c]!=='#e8301c'&&k[l.r][l.c]!=='#ff3a1a');
   const wl=Math.floor(.585*rows),refl=[],spark=[];
   for(const l of lampsF){if(l.r>=wl||l.r<.3*rows||hash(l.c*3,l.r*5)>.3)continue;
     const rr=wl+1+Math.round((wl-l.r)*.5);if(rr<rows*.9)refl.push({c:l.c,r:rr,col:l.col,ph:l.ph,a:1})}
@@ -621,7 +621,7 @@ themeToggle.addEventListener('click',()=>{
   fw.rockets.length=0;fw.parts.length=0;if(!day)nextFW=t+1500;
   frame(0);
 });
-const roles=['car enthusiast','computer troubleshooter','trail buddy','weekend mechanic','problem solver'];
+const roles=['program manager','product quality engineer','forward deployed engineer','business analyst','logistics and supply chain manager'];
 const el=document.getElementById('typed');let ri=0,ci=0,del=false;
 function type(){const w=roles[ri];
   if(!del){ci++;el.textContent=w.slice(0,ci);if(ci===w.length){del=true;return setTimeout(type,1600)}return setTimeout(type,85)}
