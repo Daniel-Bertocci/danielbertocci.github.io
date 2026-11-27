@@ -535,7 +535,7 @@ function buildBridgeScene(key,rows,ROFF){
   const blink={r:Math.floor(.125*rows),c:Math.floor(.58*cols)};
   // Cars on the deck: white one way, red the other
   const paths=[];
-  for(const [vr,dir] of [[.922,1],[.945,-1]]){const r=Math.floor(vr*rows),cells=[];for(let c=0;c<cols;c++){const u=c/cols;if((u>.553&&u<.60)||(u>.625&&u<.692))continue;cells.push({r,c,gl:'-'})}paths.push({cells,dir,sp:.00007,off:vr})}
+  for(const [vr,dir] of [[.922,1],[.945,-1]]){const r=Math.floor(.92*rows)+(dir>0?0:1),cells=[];for(let c=-14;c<cols+14;c++){const u=c/cols;cells.push({r,c,gl:'-',hide:(u>.553&&u<.60)||(u>.625&&u<.692)})}paths.push({cells,dir,sp:.00007,off:vr})}
 
   const stars=[];
   for(let r=0;r<rows*.42;r++)for(let c=0;c<cols;c++)if(hash(c+7,r+3)>.955&&skyPal.includes(k[r][c]))stars.push({r,c,ph:hash(c,r)*6.28});
@@ -581,7 +581,7 @@ function drawBridge(){
   const W_=['#ffffff','#fff2c8','#ffe08a','#e0c070','#b49a58'],R_=['#ffb0a0','#ff3a30','#ff1a1a','#e00a0a','#b00808'];
   for(const p of bridge.paths){const n=p.cells.length,cs=p.dir>0?W_:R_;
     for(let j=0;j<4;j++){const q=(((j/4+p.off+t*p.sp*p.dir)%1)+1)%1,head=Math.floor(q*n);
-      for(let m=0;m<8;m++){const cell=p.cells[head-p.dir*m];if(cell)put(cell.r,cell.c,m?'-':'#',cs[Math.min(4,m)])}}}
+      for(let m=0;m<8;m++){const cell=p.cells[head-p.dir*m];if(cell&&!cell.hide)put(cell.r,cell.c,m?'-':'#',cs[Math.min(4,m)])}}}
   {const pulse=.82+.18*Math.sin(t*.0018),pal=['#16308a','#1f3d9e','#2f4fb0','#4a66c4','#7a90dc','#c4d0f6'];
    for(const q of bridge.glow){const f=Math.max(0,1-(q.d-1)/2)*pulse;if(q.th>f*.95)continue;
      put(q.r,q.c,f>.62?'+':f>.3?':':'.',pal[Math.min(5,Math.floor(f*6))])}}
