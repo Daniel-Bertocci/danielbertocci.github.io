@@ -184,18 +184,13 @@ html.js h2.rv.in{letter-spacing:0}
 /* FX15 arrow nudge */
 .ext a b::after{display:inline-block;margin-left:.3em;transition:transform .25s}
 .ext a:hover b::after{transform:translate(4px,-4px)}
-/* FX17 scroll cue */
-.fx-cue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:2;color:#fff;font:600 .72rem ui-monospace,Menlo,monospace;letter-spacing:.2em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:.8;transition:opacity .4s;pointer-events:none}
-.fx-cue.gone{opacity:0}
-.fx-cue i{width:1px;height:34px;background:linear-gradient(#fff,transparent);transform-origin:top;animation:fxCue 1.6s ease-in-out infinite}
-@keyframes fxCue{0%{transform:scaleY(0)}60%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
 /* FX18 theme wipe */
 .fx-wipe{position:fixed;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;z-index:150;pointer-events:none;animation:fxWipe .85s ease-out forwards}
 @keyframes fxWipe{from{transform:scale(0);opacity:.95}70%{opacity:.7}to{transform:scale(90);opacity:0}}
 /* FX20 selection + scrollbar */
 ::selection{background:#6ea8fe;color:#0b1020}
 html{scrollbar-width:thin;scrollbar-color:#fff transparent}
-@media(prefers-reduced-motion:reduce){nav,.hero .box,.hero h1,.fx-cue i{animation:none!important}.hero h1{color:#6ea8fe}}
+@media(prefers-reduced-motion:reduce){nav,.hero .box,.hero h1{animation:none!important}.hero h1{color:#6ea8fe}}
 </style>
 </head>
 <body id="portfolio">
@@ -707,9 +702,6 @@ if(R)return;
 const hero=$('#hero'),box=$('.hero .box'),h1=$('.hero h1'),tg=$('#themeToggle');
 /* FX3 name decodes on load */
 {const fin=h1.textContent,cs='01#%&@*+=<>/';let f=0;const iv=setInterval(()=>{f++;h1.textContent=[...fin].map((c,i)=>c===' '||i<f/2?c:cs[Math.floor(Math.random()*cs.length)]).join('');if(f>fin.length*2+4){h1.textContent=fin;clearInterval(iv)}},35)}
-/* FX17 scroll cue */
-const cue=document.createElement('div');cue.className='fx-cue';cue.innerHTML='scroll<i></i>';hero.appendChild(cue);
-addEventListener('scroll',()=>cue.classList.toggle('gone',scrollY>40),{passive:true});
 /* FX4 3D tilt */
 if(fine){
   hero.addEventListener('pointermove',e=>{const b=box.getBoundingClientRect(),dx=Math.max(-1,Math.min(1,(e.clientX-(b.left+b.width/2))/(innerWidth/2))),dy=Math.max(-1,Math.min(1,(e.clientY-(b.top+b.height/2))/(innerHeight/2)));
@@ -721,6 +713,7 @@ addEventListener('pointermove',e=>{const p=e.target.closest&&e.target.closest('.
 /* FX8 click sparkles */
 const SP=['#ff4d6d','#ffd23d','#6ec8ff','#7dff9a','#c08cff','#ff9a3c'];
 addEventListener('pointerdown',e=>{
+  if(document.body.classList.contains('day'))return;const hr=hero.getBoundingClientRect();if(e.clientY<hr.top||e.clientY>hr.bottom)return;
   for(let i=0;i<10;i++){const s=document.createElement('span'),a=Math.random()*6.28,d=30+Math.random()*40;s.className='fx-spark';s.textContent=['*','+','.'][i%3];s.style.cssText='left:'+e.clientX+'px;top:'+e.clientY+'px;color:'+SP[i%6]+';--dx:'+Math.cos(a)*d+'px;--dy:'+Math.sin(a)*d+'px';document.body.appendChild(s);setTimeout(()=>s.remove(),850)}
 });
 /* FX18 theme-switch wipe */
