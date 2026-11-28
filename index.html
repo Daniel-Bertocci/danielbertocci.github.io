@@ -162,6 +162,40 @@ html.js .ext a.rv{transition:opacity .9s cubic-bezier(.2,.8,.2,1) var(--d,0s),tr
 .proj{position:relative}
 @media(prefers-reduced-motion:reduce){html.js .rv{opacity:1;transform:none}nav.hide{transform:none}}
 .hero p{min-height:2.9em}
+.hero .box{transition:transform .25s ease-out;will-change:transform}
+/* FX2 name shimmer */
+.hero h1{background:linear-gradient(100deg,#6ea8fe 20%,#2f6df0 45%,#6ea8fe 70%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:fxShine 5s linear infinite}
+@keyframes fxShine{to{background-position:-250% 0}}
+/* FX8 sparkles */
+.fx-spark{position:fixed;z-index:210;pointer-events:none;font:700 16px ui-monospace,Menlo,monospace;animation:fxSpark .8s ease-out forwards}
+@keyframes fxSpark{to{transform:translate(var(--dx),var(--dy)) scale(.3);opacity:0}}
+/* FX11 row spotlight */
+.proj{border-radius:10px}
+.proj::before{content:"";position:absolute;inset:0;border-radius:10px;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(280px circle at var(--mx,50%) var(--my,50%),rgba(110,168,254,.14),transparent 70%)}
+.proj:hover::before{opacity:1}
+/* FX12 dim the other rows */
+#list:hover .proj:not(:hover){opacity:.38}
+html.js .proj.rv.in{transition:opacity .35s,transform .9s cubic-bezier(.2,.8,.2,1)}
+/* FX13 plus spins on hover */
+.proj:not(.open) button:hover .pl{transform:rotate(90deg)}
+/* FX14 heading letter-spacing reveal */
+html.js h2.rv{letter-spacing:.35em;transition:opacity .9s cubic-bezier(.2,.8,.2,1) var(--d,0s),transform .9s cubic-bezier(.2,.8,.2,1) var(--d,0s),letter-spacing 1.2s cubic-bezier(.2,.8,.2,1) var(--d,0s)}
+html.js h2.rv.in{letter-spacing:0}
+/* FX15 arrow nudge */
+.ext a b::after{display:inline-block;margin-left:.3em;transition:transform .25s}
+.ext a:hover b::after{transform:translate(4px,-4px)}
+/* FX17 scroll cue */
+.fx-cue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:2;color:#fff;font:600 .72rem ui-monospace,Menlo,monospace;letter-spacing:.2em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:.8;transition:opacity .4s;pointer-events:none}
+.fx-cue.gone{opacity:0}
+.fx-cue i{width:1px;height:34px;background:linear-gradient(#fff,transparent);transform-origin:top;animation:fxCue 1.6s ease-in-out infinite}
+@keyframes fxCue{0%{transform:scaleY(0)}60%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+/* FX18 theme wipe */
+.fx-wipe{position:fixed;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;z-index:150;pointer-events:none;animation:fxWipe .85s ease-out forwards}
+@keyframes fxWipe{from{transform:scale(0);opacity:.95}70%{opacity:.7}to{transform:scale(90);opacity:0}}
+/* FX20 selection + scrollbar */
+::selection{background:#6ea8fe;color:#0b1020}
+html{scrollbar-width:thin;scrollbar-color:#fff transparent}
+@media(prefers-reduced-motion:reduce){nav,.hero .box,.hero h1,.fx-cue i{animation:none!important}.hero h1{color:#6ea8fe}}
 </style>
 </head>
 <body id="portfolio">
@@ -661,6 +695,36 @@ function upd(){tick=false;const y=scrollY,max=document.documentElement.scrollHei
     if(y<80)nav.classList.remove('hide')}}
 addEventListener('scroll',()=>{if(!tick){tick=true;requestAnimationFrame(upd)}},{passive:true});
 addEventListener('resize',upd);upd();
+})();
+</script>
+<script>
+(function(){
+const R=matchMedia('(prefers-reduced-motion: reduce)').matches,fine=matchMedia('(pointer: fine)').matches;
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+/* FX19 tab title changes when you leave */
+const T0=document.title;document.addEventListener('visibilitychange',()=>{document.title=document.hidden?'👀 come back!':T0});
+if(R)return;
+const hero=$('#hero'),box=$('.hero .box'),h1=$('.hero h1'),tg=$('#themeToggle');
+/* FX3 name decodes on load */
+{const fin=h1.textContent,cs='01#%&@*+=<>/';let f=0;const iv=setInterval(()=>{f++;h1.textContent=[...fin].map((c,i)=>c===' '||i<f/2?c:cs[Math.floor(Math.random()*cs.length)]).join('');if(f>fin.length*2+4){h1.textContent=fin;clearInterval(iv)}},35)}
+/* FX17 scroll cue */
+const cue=document.createElement('div');cue.className='fx-cue';cue.innerHTML='scroll<i></i>';hero.appendChild(cue);
+addEventListener('scroll',()=>cue.classList.toggle('gone',scrollY>40),{passive:true});
+/* FX4 3D tilt */
+if(fine){
+  hero.addEventListener('pointermove',e=>{const b=box.getBoundingClientRect(),dx=Math.max(-1,Math.min(1,(e.clientX-(b.left+b.width/2))/(innerWidth/2))),dy=Math.max(-1,Math.min(1,(e.clientY-(b.top+b.height/2))/(innerHeight/2)));
+    box.style.transform='perspective(900px) rotateX('+(-dy*6)+'deg) rotateY('+(dx*8)+'deg)'});
+  hero.addEventListener('pointerleave',()=>{box.style.transform=''});
+}
+/* FX11 row spotlight */
+addEventListener('pointermove',e=>{const p=e.target.closest&&e.target.closest('.proj');if(p){const r=p.getBoundingClientRect();p.style.setProperty('--mx',(e.clientX-r.left)+'px');p.style.setProperty('--my',(e.clientY-r.top)+'px')}},{passive:true});
+/* FX8 click sparkles */
+const SP=['#ff4d6d','#ffd23d','#6ec8ff','#7dff9a','#c08cff','#ff9a3c'];
+addEventListener('pointerdown',e=>{
+  for(let i=0;i<10;i++){const s=document.createElement('span'),a=Math.random()*6.28,d=30+Math.random()*40;s.className='fx-spark';s.textContent=['*','+','.'][i%3];s.style.cssText='left:'+e.clientX+'px;top:'+e.clientY+'px;color:'+SP[i%6]+';--dx:'+Math.cos(a)*d+'px;--dy:'+Math.sin(a)*d+'px';document.body.appendChild(s);setTimeout(()=>s.remove(),850)}
+});
+/* FX18 theme-switch wipe */
+tg.addEventListener('click',()=>{const r=tg.getBoundingClientRect(),d=document.createElement('div');d.className='fx-wipe';d.style.left=(r.left+r.width/2)+'px';d.style.top=(r.top+r.height/2)+'px';d.style.background=document.body.classList.contains('day')?'#fff3c8':'#0a1030';document.body.appendChild(d);setTimeout(()=>d.remove(),900)});
 })();
 </script>
 </body>
